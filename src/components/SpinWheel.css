@@ -1,0 +1,47 @@
+/* SpinWheel.css */
+.spin-wheel-container {
+    position: relative;
+    text-align: center;
+}
+
+#wheel {
+    border-radius: 50%;
+    border: 25px solid #e7d323;
+    box-shadow: 0px 0px 40px 10px rgba(9, 9, 9, 0.921);
+    display: block;
+}
+
+/* Style du pointeur */
+#pointer {
+    position: absolute;
+    left: 50%;
+    margin-top: -5%;
+    transform: translateX(-50%); 
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 40px solid #69600d;
+    z-index: 10;
+}
+
+/* Style du cercle au centre pour afficher le numéro gagnant */
+#winnerCircle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #e7d323;
+    border: 2px solid #b6a71d;
+    box-shadow: 0px 0px 20px 10px rgba(28, 28, 28, 0.921);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    font-weight: bold;
+    color: #000;
+    z-index: 5;
+}

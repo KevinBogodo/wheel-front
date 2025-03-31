@@ -1,0 +1,19 @@
+export const LOGIN = "/auth/login";
+export const REFRESH_TOKEN = "/auth/refresh";
+export const LOG_OUT = "/auth/logout";
+export const GET_USER = "/auth/user";
+
+export const DRAW_DATA = "/drawData";
+export const CASHDESK_OP = "/cashdeskOps";
+export const CASHDESK_OP_USER = "/user/cashdeskOps";
+export const CASHDESK = "/cashdesks";
+export const USER = "/users";
+export const ROLE = "/roles";
+export const JACKPOT_CONFIG = "/jackpotConfigs";
+export const BET = "/bets";
+export const CHECKS = "/checks";
+export const CASHOUTS = "/cashouts";
+export const REPORTS = "/report";
+export const LOTS = "/lots";
+export const JACKPOT = "jackpots";
+export const CASHBACK = "/cashBacks"
