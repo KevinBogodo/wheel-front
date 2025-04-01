@@ -21,6 +21,20 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
 
   console.log("winningNumber: ", winningNumber);
   
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Set winner immediately when component mounts
+    setWinner(winningNumber);
+    
+    // Initial rotation to position winning number at the pointer
+    const initialRotation = getInitialRotation(winningNumber);
+    drawWheel(ctx, initialRotation);
+  }, []);
 
   // Standard European roulette wheel sequence (clockwise)
   const wheelSequence = [
@@ -62,6 +76,92 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     return Math.PI/2 - (winningIndex * angleStep + angleStep / 2);
   };
 
+  // Draw wheel shadow - REDUCED
+  const drawWheelShadow = (ctx: CanvasRenderingContext2D, radius: number, borderWidth: number) => {
+    ctx.save();
+    
+    // Create a more subtle shadow around the wheel
+    // Similar to but softer than: box-shadow: 0px 0px 40px 10px rgba(9, 9, 9, 0.921);
+    const shadowSize = 25; // Reduced from 40 to 25
+    const totalRadius = radius + borderWidth + shadowSize;
+    
+    // Create a radial gradient for the shadow
+    const shadowGradient = ctx.createRadialGradient(
+      0, 0, radius + borderWidth - 5, // Inner radius just inside the border
+      0, 0, totalRadius // Outer radius includes shadow
+    );
+    
+    shadowGradient.addColorStop(0, 'rgba(9, 9, 9, 0.5)'); // Reduced opacity from 0.921 to 0.5
+    shadowGradient.addColorStop(0.4, 'rgba(9, 9, 9, 0.3)'); // Reduced opacity
+    shadowGradient.addColorStop(0.8, 'rgba(9, 9, 9, 0.1)'); // Reduced opacity
+    shadowGradient.addColorStop(1, 'rgba(9, 9, 9, 0)'); // Fade to transparent
+    
+    // Draw the shadow as a ring around the wheel
+    ctx.beginPath();
+    ctx.arc(0, 0, totalRadius, 0, 2 * Math.PI);
+    ctx.arc(0, 0, radius + borderWidth - 5, 0, 2 * Math.PI, true); // Cut out the inside
+    ctx.fillStyle = shadowGradient;
+    ctx.fill();
+    
+    ctx.restore();
+  };
+
+  // Draw gold border
+  const drawGoldBorder = (ctx: CanvasRenderingContext2D, radius: number) => {
+    const borderWidth = 20; // Width of the gold border
+    
+    ctx.save();
+    
+    // Draw the wheel shadow first (behind everything)
+    drawWheelShadow(ctx, radius, borderWidth);
+    
+    // Gold border with gradient similar to winnerCircle
+    const goldGradient = ctx.createRadialGradient(
+      0, 0, radius,
+      0, 0, radius + borderWidth
+    );
+    goldGradient.addColorStop(0, '#f9e547');
+    goldGradient.addColorStop(0.4, '#e7d323');
+    goldGradient.addColorStop(1, '#b6a71d');
+    
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
+    ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
+    ctx.fillStyle = goldGradient;
+    ctx.fill();
+    
+    // Add thin border
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#d4b923';
+    ctx.stroke();
+    
+    // Inner border
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#d4b923';
+    ctx.stroke();
+    
+    // Add inner highlights
+    const innerHighlight = ctx.createRadialGradient(
+      0, 0, radius,
+      0, 0, radius + borderWidth
+    );
+    innerHighlight.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+    innerHighlight.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
+    innerHighlight.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
+    
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
+    ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
+    ctx.fillStyle = innerHighlight;
+    ctx.fill();
+    
+    ctx.restore();
+  };
+
   // Draw the wheel
   const drawWheel = (ctx: CanvasRenderingContext2D, rotationAngle: number = 0) => {
     const canvas = canvasRef.current;
@@ -69,12 +169,15 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
 
     const numSegments = segments.length;
     const angleStep = 2 * Math.PI / numSegments;
-    const radius = canvas.width / 2;
+    const radius = (canvas.width / 2) - 35; // Slightly reduced for border and shadow
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.save();
-    ctx.translate(radius, radius);
+    ctx.translate(canvas.width/2, canvas.height/2);
+
+    // Draw gold border first (behind the wheel)
+    drawGoldBorder(ctx, radius);
 
     // Draw the segments
     for (let i = 0; i < numSegments; i++) {
@@ -106,12 +209,12 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
       ctx.restore();
     }
 
-    // Draw outer rim
+    // Draw inner rim
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "#DDD";
-    ctx.stroke();
+    ctx.lineWidth = 3;
+    // ctx.strokeStyle = "#DDD";
+    // ctx.stroke();
 
     ctx.restore();
   };
@@ -200,9 +303,14 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
   
   return (
     <div className={`spin-wheel-container ${className || ''}`}>
-      <canvas ref={canvasRef} id="wheel" width={700} height={700} />
+      <canvas ref={canvasRef} id="wheel" width={800} height={800} />
       <div id="pointer"></div>
       <div id="winnerCircle">{winner !== null ? winner : ''}</div>
+      
+      {/* Placeholder for other components */}
+      <div className="additional-components">
+        {/* You can add other components here */}
+      </div>
     </div>
   );
 };

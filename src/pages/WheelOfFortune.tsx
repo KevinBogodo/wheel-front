@@ -7,6 +7,7 @@ import io from "socket.io-client";
 const socket = io(`${api.SOCKET_URL}`);
 import { getDrawData } from "@/helper/backend_helper";
 import MainDrawNumber from "@/components/Global/Home/main-draw-number";
+import MainTable from "@/components/Global/Home/main-table";
 
 
 // import logo from '../assets/images/logo.png';
@@ -67,40 +68,10 @@ const WheelOfFortune = () => {
       }
   };
 
-  // const startLottery = (draw: number, time: number, index: number) => {
-  //   let interval: NodeJS.Timeout;
-
-  //   // Commencer la loterie pour cet index
-  //   interval = setInterval(() => {
-  //     const randomNum = Math.floor(Math.random() * 90) + 1; // Générer un nombre aléatoire entre 1 et 90
-  //     setResults((prevResults) => {
-  //       const newResults = [...prevResults];
-  //       newResults[index] = randomNum; // Mettre à jour seulement le résultat à cet index
-  //       return newResults;
-  //     });
-  //   }, 50);
-
-  //   // Arrêter la loterie après `time` millisecondes
-  //   setTimeout(() => {
-  //     clearInterval(interval);
-  //     setResults((prevResults) => {
-  //       const newResults = [...prevResults];
-  //       newResults[index] = draw; // Réinitialiser à la valeur finale pour cet index
-  //       return newResults;
-  //     });
-  //     if (index === 4) {
-  //       // setDrawing(prev => !prev)
-  //       setTimeout(() => {
-  //         setTime(startingSeconds)
-  //       },2000)
-  //     }
-  //   }, time);
-
-  // };
-  
-
   return (
     <div className="flex flex-row w-full h-full bg-[url('/red.jpg')] overflow-hidden">
+    {/* <div className="flex flex-row w-full h-full bg-[url('/blue.jpg')] overflow-hidden"> */}
+    {/* <div className="flex flex-row w-full h-full overflow-hidden"> */}
 
       {/* left */}
       <div className="flex-[15%] flex-row">
@@ -116,14 +87,16 @@ const WheelOfFortune = () => {
       </div>
 
       {/* middle */}
-      <div className="flex-[60%] flex-col items-center relative m-auto">
-        <div className="flex flex-col items-center relative">
+      <div className="flex-[60%] flex-col items-center relative m-auto w-full">
+        <div className="flex flex-col items-center relative w-full">
           <SpinWheel winningNumber={results} start={start} setStart={setStart}/>
         </div>
       </div>
 
       {/* Right */}
-      <div className="flex-[20%]">Hell</div>
+      <div className="flex-[25%] flex-col w-full h-full text-xs">
+        <MainTable />
+      </div>
     </div>
   );
 };
