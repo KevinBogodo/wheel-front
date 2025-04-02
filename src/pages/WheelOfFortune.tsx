@@ -22,6 +22,7 @@ const WheelOfFortune = () => {
   const [drawNumber, setDrawNumber] = useState(0);
   const [results, setResults] = useState<number>(0);
   const [lastFiveDraw, setLastFiveDraw] = useState([]);
+  const [lastUndredDraw, setLastUndredDraw] = useState([]);
 
   useEffect(() => {
     socket.on("new_draw", (data: any) => {
@@ -61,6 +62,8 @@ const WheelOfFortune = () => {
           setResults(row.no1);
           setDrawNumber(row.numbers);
           setLastFiveDraw(data?.data?.lastDraws);
+          setLastUndredDraw(data?.data?.lastUndredDraw);
+          
           // setJackpot(data?.data?.currentJackpot)
         }
       } catch (error) {
@@ -89,13 +92,13 @@ const WheelOfFortune = () => {
       {/* middle */}
       <div className="flex-[60%] flex-col items-center relative m-auto w-full">
         <div className="flex flex-col items-center relative w-full">
-          <SpinWheel winningNumber={results} start={start} setStart={setStart}/>
+          {/* <SpinWheel winningNumber={results} start={start} setStart={setStart}/> */}
         </div>
       </div>
 
       {/* Right */}
       <div className="flex-[25%] flex-col w-full h-full text-xs">
-        <MainTable />
+        <MainTable lastUndredDraw={lastUndredDraw} lastDraw={lastFiveDraw}/>
       </div>
     </div>
   );
