@@ -9,7 +9,7 @@ const Authentification = () => {
         <div className='container relative h-full flex-col items-center justify-center md:grid max-sm:p-3 lg:max-w-none lg:grid-cols-2 lg:px-0'>
             <div className="relative hidden h-full flex-col bg-muted p-0 text-white lg:flex">
                 <div className="relative z-20 h-full flex items-center text-lg font-medium border-r-2">
-                    <img src={photo} className='w-full h-full' />
+                    {/* <img src={photo} className='w-full h-full' /> */}
                 </div>
             </div>
             <div className='lg:p-8'>

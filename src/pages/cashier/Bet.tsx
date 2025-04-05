@@ -20,6 +20,7 @@ import BetTicket from '@/components/App/bet/bet-ticket';
 import AppContent from '@/components/Global/app-content';
 import ShortcutNumber from '@/components/App/bet/shortcut-number';
 import CashBack from '@/components/App/bet/cash-back';
+import { Button } from '@/components/ui/button';
 
 const socket = io(`${api.SOCKET_URL}`);
 
@@ -243,18 +244,33 @@ const Bet: React.FC = () => {
         <AppContent className='flex w-full h-[11%]'>
           <HeaderSession />
         </AppContent>
-        <AppContent className='inline-flex w-full h-[6%] gap-3 px-2'>
-          <ShortcutNumber setBetNumber={setBetNumber} setOdds={setOdds} />
+        <AppContent className='flex w-full h-[60%]'>
+          <AppContent className='flex flex-row w-full h-full'>
+            <PanelNumber
+              disableAdd={disableAdd}
+              editBet={editBet}
+              isDisabled={(time <= 5)? true : false}
+              />
+            <ShortcutNumber setBetNumber={setBetNumber} setOdds={setOdds} />
+          </AppContent>
         </AppContent>
-        <AppContent className='flex w-full h-[82%]'>
-          <PanelNumber
-            disableAdd={disableAdd}
-            editBet={editBet}
-            selectFiveNumbers={selectFiveNumbers}
-            isDisabled={(time <= 5)? true : false}
-          />
+        <AppContent className='flex flex-col w-full h-[25%] border'>
+          {/* Odd - Even */}
+          <AppContent className='flex flex-row w-full'>
+              <p>COLOURS: </p>
+          </AppContent>
+
+          {/* Low - High */}
+          <AppContent className='flex flex-row w-full'>
+          </AppContent>
+
+          {/* Dozens */}
+          <AppContent className='flex flex-row w-full'>
+          </AppContent>
+
         </AppContent>
       </AppContent>
+
       {/* Right */}
       {currentUserRole === 'cashier' &&
         <AppContent className='flex-[1] flex-col w-full h-full bg-accent'>

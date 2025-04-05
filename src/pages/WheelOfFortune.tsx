@@ -92,7 +92,7 @@ const WheelOfFortune = () => {
       {/* middle */}
       <div className="flex-[60%] flex-col items-center relative m-auto w-full">
         <div className="flex flex-col items-center relative w-full">
-          {/* <SpinWheel winningNumber={results} start={start} setStart={setStart}/> */}
+          <SpinWheel winningNumber={results} start={start} setStart={setStart}/>
         </div>
       </div>
 

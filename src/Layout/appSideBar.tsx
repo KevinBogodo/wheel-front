@@ -34,10 +34,10 @@ const data = {
           title: 'Historique',
           url: '/caisse/historique',
         },
-        {
-          title: 'Lots',
-          url: '/caisse/lots',
-        },
+        // {
+        //   title: 'Lots',
+        //   url: '/caisse/lots',
+        // },
       ],
     },
     {
@@ -74,10 +74,10 @@ const data = {
           title: 'Caisses',
           url: '/parametres/caisses',
         },
-        {
-          title: 'Cagnottes',
-          url: '/parametres/cagnottes',
-        },
+        // {
+        //   title: 'Cagnottes',
+        //   url: '/parametres/cagnottes',
+        // },
       ],
     },
   ],
@@ -116,10 +116,10 @@ const data = {
           title: 'Historique',
           url: '/caisse/historique',
         },
-        {
-          title: 'Lots',
-          url: '/caisse/lots',
-        },
+        // {
+        //   title: 'Lots',
+        //   url: '/caisse/lots',
+        // },
       ],
     },
     {
@@ -174,10 +174,10 @@ const data = {
           title: 'Historique',
           url: '/caisse/historique',
         },
-        {
-          title: 'Lots',
-          url: '/caisse/lots',
-        },
+        // {
+        //   title: 'Lots',
+        //   url: '/caisse/lots',
+        // },
       ],
     },
     {
@@ -214,10 +214,10 @@ const data = {
           title: 'Caisses',
           url: '/parametres/caisses',
         },
-        {
-          title: 'Cagnottes',
-          url: '/parametres/cagnottes',
-        },
+        // {
+        //   title: 'Cagnottes',
+        //   url: '/parametres/cagnottes',
+        // },
         // {
         //   title: 'Tirages',
         //   url: '/parametres/tirages',

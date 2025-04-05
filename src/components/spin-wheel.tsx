@@ -16,11 +16,57 @@ interface Segment {
 
 const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, setStart }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [winner, setWinner] = useState<number | null>(winningNumber);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [canvasSize, setCanvasSize] = useState({ width: 800, height: 800 });
 
   console.log("winningNumber: ", winningNumber);
   
+  // Fonction pour ajuster la taille du canvas en fonction du conteneur
+  const resizeCanvas = () => {
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const containerWidth = container.clientWidth;
+      
+      // On garde un aspect carré pour le canvas
+      setCanvasSize({
+        width: containerWidth,
+        height: containerWidth
+      });
+    }
+  };
+
+  // Ajouter un écouteur de redimensionnement
+  useEffect(() => {
+    resizeCanvas(); // Taille initiale
+    
+    const handleResize = () => {
+      resizeCanvas();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Redessiner le canvas lorsque sa taille change
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Mettre à jour les dimensions du canvas
+    canvas.width = canvasSize.width;
+    canvas.height = canvasSize.height;
+    
+    // Redessiner la roue avec la nouvelle taille
+    const initialRotation = getInitialRotation(winningNumber);
+    drawWheel(ctx, initialRotation);
+  }, [canvasSize]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -108,7 +154,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
 
   // Draw gold border
   const drawGoldBorder = (ctx: CanvasRenderingContext2D, radius: number) => {
-    const borderWidth = 20; // Width of the gold border
+    const borderWidth = radius * 0.05; // Width of the gold border proportional to radius
     
     ctx.save();
     
@@ -133,14 +179,14 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     // Add thin border
     ctx.beginPath();
     ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-    ctx.lineWidth = 4;
+    ctx.lineWidth = radius * 0.01; // Proportional line width
     ctx.strokeStyle = '#d4b923';
     ctx.stroke();
     
     // Inner border
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-    ctx.lineWidth = 4;
+    ctx.lineWidth = radius * 0.01; // Proportional line width
     ctx.strokeStyle = '#d4b923';
     ctx.stroke();
     
@@ -169,7 +215,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
 
     const numSegments = segments.length;
     const angleStep = 2 * Math.PI / numSegments;
-    const radius = (canvas.width / 2) - 35; // Slightly reduced for border and shadow
+    const radius = (Math.min(canvas.width, canvas.height) / 2) - (canvas.width * 0.04); // Proportional
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -177,7 +223,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     ctx.translate(canvas.width/2, canvas.height/2);
 
     // Draw gold border first (behind the wheel)
-    drawGoldBorder(ctx, radius);
+    // drawGoldBorder(ctx, radius);
 
     // Draw the segments
     for (let i = 0; i < numSegments; i++) {
@@ -186,15 +232,17 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
       ctx.arc(0, 0, radius, angleStep * i + rotationAngle, angleStep * (i + 1) + rotationAngle);
       ctx.lineTo(0, 0);
       ctx.fillStyle = segments[i].color;
-      ctx.lineWidth = 1;
+      ctx.lineWidth = canvas.width * 0.001; // Proportional line width
       ctx.fill();
       ctx.stroke();
     }
 
-    // Add the numbers
+    // Add the numbers with responsive font size
+    const fontSize = Math.max(canvas.width * 0.025, 12); // Min font size of 12px
+    
     for (let i = 0; i < numSegments; i++) {
       const angle = angleStep * i + rotationAngle + angleStep / 2;
-      const textRadius = radius - 40;
+      const textRadius = radius - (radius * 0.13); // Proportional text placement
       const x = Math.cos(angle) * textRadius;
       const y = Math.sin(angle) * textRadius;
       
@@ -202,7 +250,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
       ctx.translate(x, y);
       ctx.rotate(angle + Math.PI/2); // Rotate text to be readable from outside
       ctx.fillStyle = "white";
-      ctx.font = "bold 20px Arial";
+      ctx.font = `bold ${fontSize}px Arial`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(segments[i].number.toString(), 0, 0);
@@ -212,7 +260,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     // Draw inner rim
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-    ctx.lineWidth = 3;
+    ctx.lineWidth = canvas.width * 0.003; // Proportional line width
     // ctx.strokeStyle = "#DDD";
     // ctx.stroke();
 
@@ -302,14 +350,68 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
   }, [start]);
   
   return (
-    <div className={`spin-wheel-container ${className || ''}`}>
-      <canvas ref={canvasRef} id="wheel" width={800} height={800} />
-      <div id="pointer"></div>
-      <div id="winnerCircle">{winner !== null ? winner : ''}</div>
+    <div 
+      ref={containerRef}
+      className={`relative w-full aspect-square max-w-[800px] mx-auto ${className || ''}`}
+    >
+      {/* Image de la roue en arrière-plan */}
+      <div 
+        className="absolute inset-0 bg-no-repeat bg-center bg-contain"
+        style={{ 
+          backgroundImage: 'url(/wheel01.png)',
+          width: '120%', 
+          height: '120%', 
+          left: '-10%', 
+          top: '-10%',
+          zIndex: 0 
+        }}
+      ></div>
       
-      {/* Placeholder for other components */}
-      <div className="additional-components">
-        {/* You can add other components here */}
+      {/* Canvas centré */}
+      <canvas 
+        ref={canvasRef} 
+        id="wheel" 
+        className="relative w-full h-full"
+        style={{ zIndex: 1 }}
+      />
+      
+      {/* Pointeur avec taille responsive */}
+      <div 
+        id="pointer" 
+        style={{ 
+          zIndex: 10,
+          fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.04)` 
+        }}
+      ></div>
+      
+      {/* Conteneur pour wheel02.png qui entoure le winnerCircle */}
+      <div 
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        style={{ 
+          zIndex: 998,
+          width: '25%',
+          height: '25%',
+          backgroundImage: 'url(/wheel02.png)',
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        {/* Cercle du gagnant avec taille responsive */}
+        <div 
+          id="winnerCircle" 
+          style={{ 
+            zIndex: 999,
+            width: '94%',
+            height: '95%',
+            fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.12)` // Font size proportionnelle
+          }}
+        >
+          {winner !== null ? winner : ''}
+        </div>
       </div>
     </div>
   );

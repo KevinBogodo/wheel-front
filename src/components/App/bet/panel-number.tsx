@@ -1,126 +1,60 @@
-import { CircleChevronDown, CircleChevronLeft, CircleChevronRight, CircleChevronUp } from 'lucide-react';
 import NumberBord from './number-bord';
 
-const initialBord = [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-    [21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-    [31, 32, 33, 34, 35, 36, 37, 38, 39, 40],
-    [41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
-    [51, 52, 53, 54, 55, 56, 57, 58, 59, 60],
-    [61, 62, 63, 64, 65, 66, 67, 68, 69, 70],
-    [71, 72, 73, 74, 75, 76, 77, 78, 79, 80],
-    [81, 82, 83, 84, 85, 86, 87, 88, 89, 90],
+const rouletteNumbers = [
+  [1, 2, 3, 4, 5, 6],
+  [7, 8, 9, 10, 11, 12],
+  [13, 14, 15, 16, 17, 18],
+  [19, 20, 21, 22, 23, 24],
+  [25, 26, 27, 28, 29, 30],
+  [31, 32, 33, 34, 35, 36]
 ];
+
+const numberColors = {
+  1: 'bg-red-600', 3: 'bg-red-600', 5: 'bg-red-600', 7: 'bg-red-600', 9: 'bg-red-600',
+  12: 'bg-red-600', 14: 'bg-red-600', 16: 'bg-red-600', 18: 'bg-red-600', 19: 'bg-red-600',
+  21: 'bg-red-600', 23: 'bg-red-600', 25: 'bg-red-600', 27: 'bg-red-600', 30: 'bg-red-600',
+  32: 'bg-red-600', 34: 'bg-red-600', 36: 'bg-red-600',
+  2: 'bg-black', 4: 'bg-black', 6: 'bg-black', 8: 'bg-black', 10: 'bg-black',
+  11: 'bg-black', 13: 'bg-black', 15: 'bg-black', 17: 'bg-black', 20: 'bg-black',
+  22: 'bg-black', 24: 'bg-black', 26: 'bg-black', 28: 'bg-black', 29: 'bg-black',
+  31: 'bg-black', 33: 'bg-black', 35: 'bg-black',
+  0: 'bg-green-600'
+};
 
 type Props = {
   isDisabled: boolean,
   disableAdd: boolean,
-  editBet: (number: number, action: 'add' | 'sub') => void,
-  selectFiveNumbers: (numbers: number[]) => void,
+  editBet: (number: number, action: 'add' | 'sub') => void
 }
 
-const PanelNumber = ({ disableAdd, editBet, isDisabled, selectFiveNumbers }: Props) => {
-  const handleSelectColumnTop = (colIndex: number) => {
-    let fiveNumbers = [];
-    for (let i = 0; i < 5; i++) {
-      fiveNumbers.push(initialBord[i][colIndex]);
-    }
-    selectFiveNumbers(fiveNumbers);
-  };
-
-  const handleSelectColumnBottom = (colIndex: number) => {
-    let fiveNumbers = [];
-    for (let i = 4; i < 9; i++) {
-      fiveNumbers.push(initialBord[i][colIndex]);
-    }
-    selectFiveNumbers(fiveNumbers);
-  };
-  const handleSelectColumnLeft = (rowIndex: number) => {
-    const fiveNumbers = initialBord[rowIndex].slice(0, 5);
-    fiveNumbers.forEach(number => editBet(number, 'add'));
-    selectFiveNumbers(fiveNumbers);
-  };
-
-  const handleSelectColumnRight = (rowIndex: number) => {
-    const fiveNumbers = initialBord[rowIndex].slice(5, 10);
-    fiveNumbers.forEach(number => editBet(number, 'add'));
-    selectFiveNumbers(fiveNumbers);
-  };
-
+const RouletteBoard = ({ disableAdd, editBet, isDisabled }: Props) => {
   return (
-    <div className='flex flex-col w-full h-full justify-center items-center'>
-      {/* Ligne au-dessus */}
-      <div className='flex justify-center items-center h-9 w-full px-[2%] bg-inherit'>
-        {initialBord[0].map((_, colIndex) => (
-          <button
-            key={`top-${colIndex}`}
-            onClick={() => handleSelectColumnTop(colIndex)}
-            disabled={isDisabled || disableAdd}
-            className='w-full h-full flex justify-center items-center text-white'>
-            <CircleChevronDown className='text-primary' />
-          </button>
+    <div className='flex-[6] flex-col w-full h-full justify-center items-center bg-gray-300'>
+      <div className='grid grid-cols-6 gap-[1%] p-[1%] border w-full h-[85%]'>
+        {rouletteNumbers.map((row, rowIndex) => (
+          row.map((num) => (
+            <NumberBord
+              key={num}
+              isDisabled={isDisabled || disableAdd}
+              onClick={() => editBet(num, 'add')}
+              className={`text-2xl font-semibold w-full h-full flex items-center text-white justify-center border-gray-400 shadow-inner shadow-gray-200 ${numberColors[num as keyof typeof numberColors]}`}
+            >
+              {num}
+            </NumberBord>
+          ))
         ))}
       </div>
-
-      <div className='inline-flex h-full w-full justify-center items-center'>
-        {/* Left action */}
-        <div className='w-9 flex flex-col justify-between h-full bg-inherit'>
-          {initialBord.map((_, rowIndex) => (
-            <button
-              key={`left-${rowIndex}`}
-              onClick={() => handleSelectColumnLeft(rowIndex)}
-              disabled={isDisabled || disableAdd}
-              className='w-full h-full flex justify-center items-center text-white'>
-              <CircleChevronRight className='text-primary' />
-            </button>
-          ))}
-        </div>
-
-        <div className='bg-accent grid grid-cols-10 grid-rows-9 w-full h-full gap-0'>
-          {/* Tableau des numéros */}
-          {initialBord.map((row, rowIndex) => (
-            row.map((col, colIndex) => (
-              <NumberBord
-                key={`${rowIndex}-${colIndex}`}
-                isDisabled={isDisabled || disableAdd}
-                onClick={() => editBet(col, 'add')}
-                className='text-2xl font-semibold w-full h-full flex items-center justify-center border'
-              >
-                {col}
-              </NumberBord>
-            ))
-          ))}
-        </div>
-
-        {/* Right action */}
-        <div className='w-9 flex flex-col justify-between h-full bg-inherit'>
-          {initialBord.map((_, rowIndex) => (
-            <button
-              key={`right-${rowIndex}`}
-              onClick={() => handleSelectColumnRight(rowIndex)}
-              disabled={isDisabled || disableAdd}
-              className='w-full h-full flex justify-center items-center text-white'>
-              <CircleChevronLeft className='text-primary'/>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Ligne en-dessous */}
-      <div className='flex justify-center items-center bg-inherit h-9 w-full px-[2%]'>
-        {initialBord[0].map((_, colIndex) => (
-          <button
-            key={`bottom-${colIndex}`}
-            onClick={() => handleSelectColumnBottom(colIndex)}
-            disabled={isDisabled || disableAdd}
-            className='w-full h-full flex justify-center items-center text-white'>
-            <CircleChevronUp className='text-primary'/>
-          </button>
-        ))}
+      <div className='grid grid-cols-1 mt-2 w-full h-[10%]'>
+        <NumberBord
+          isDisabled={isDisabled || disableAdd}
+          onClick={() => editBet(0, 'add')}
+          className={`text-2xl font-semibold w-full h-full flex items-center text-white justify-center border-gray-200 shadow-inner shadow-gray-200 ${numberColors[0]}`}
+        >
+          0
+        </NumberBord>
       </div>
     </div>
   );
 };
 
-export default PanelNumber;
+export default RouletteBoard;
