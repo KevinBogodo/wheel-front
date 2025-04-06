@@ -29,18 +29,15 @@ const ShortcutNumber = ({ setBetNumber, setOdds}: Props) => {
   return (
     <>
       {/* aléatoire */}
-      <div className='flex-[1] flex-col gap-3 px-5 pt-3 align-middle items-center h-full w-full bg-gray-300'>
-        <p className='text-center p-1 font-bold text-xl'>Aléatoire</p>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(1)}>1</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(2)}>2</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(3)}>3</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(4)}>4</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(5)}>5</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(6)}>6</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(7)}>7</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(8)}>8</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(9)}>9</Button>
-        <Button className='w-full h-[8%] scroll-m-20 border-gray-400 shadow-inner shadow-gray-200 border-4 tracking-tight px-auto mb-[3%] bg-gray-400 font-bold text-xl' onClick={() => generateRandomNumbers(10)}>10</Button>
+      <div className='flex-[1] flex-col gap-3 px-5 pt-3 align-middle items-center h-full w-full'>
+        <p className='text-center p-1 font-bold text-xl' style={{ color: '#000' }}>Aléatoire</p>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(1)}>1</Button>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(2)}>2</Button>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(3)}>3</Button>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(4)}>4</Button>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(5)}>5</Button>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(6)}>6</Button>
+        <Button className='w-full h-[8%] scroll-m-20 border-gray-700 shadow-md shadow-gray-200 border-2 tracking-tight px-auto mb-[5%] bg-slate-600 font-semibold text-xl py-3' style={{ color: '#fff' }} onClick={() => generateRandomNumbers(7)}>7</Button>
       </div>
     </>
   )

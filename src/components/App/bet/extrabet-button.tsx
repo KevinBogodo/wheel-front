@@ -12,7 +12,7 @@ interface Props extends PropsWithChildren {
 
 const ExtrabetButton = ({children, disableAdd, editBet, className, bgColor, textColor, value}: Props) => {
   return (
-    <Button
+    <button
         className={className}
         style={{ backgroundColor: bgColor, color: textColor }}
         disabled={disableAdd}
@@ -26,7 +26,7 @@ const ExtrabetButton = ({children, disableAdd, editBet, className, bgColor, text
         }
     >
         {children}
-    </Button>
+    </button>
   )
 }
 

@@ -13,7 +13,7 @@ const BarcodeGenerator: React.FC<BarcodeGeneratorProps> = ({ value, width = "100
   return (
     <div>
       <Barcode
-        value={"12345679"}
+        value={value}
         format="CODE128"
         width={1.1}
         height={40}

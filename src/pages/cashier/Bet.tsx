@@ -79,7 +79,7 @@ const Bet: React.FC = () => {
 
   const saveBet = useCallback(() => {
 
-    if (betNumbers.length > 0) {
+    if (betNumbers.length > 0 || (choice && choice.label)) {
       const objNumbers = betNumbers.reduce((acc, value, index) => {
         acc[`no${index + 1}`] = value;
         return acc;
@@ -278,8 +278,6 @@ const Bet: React.FC = () => {
   },[]);
 
   useEffect(() => {
-    console.log(tickets);
-    
     if (tickets.length === 10) {
       setPrintCashBack(true);
     }
@@ -293,8 +291,6 @@ const Bet: React.FC = () => {
         setDisableAdd(false);
       }
       let sum = (number*36)+(choice?.value || 0)
-      console.log(sum);
-      
       setOddsSum(sum);
   },[odds,choice]);
 
@@ -316,10 +312,11 @@ const Bet: React.FC = () => {
     <AppContent className='flex fex-col w-full h-full mx-0'>
       {/* Left */}
       <AppContent className='flex-[2] w-full h-full'>
-        <AppContent className='flex w-full h-[8%]'>
+        <AppContent className='flex w-full h-[11%]'>
           <HeaderSession />
         </AppContent>
-        <AppContent className='flex w-full h-[56%]'>
+
+        <AppContent className='flex w-full h-[65%]'>
           <AppContent className='flex flex-row w-full h-full'>
             <PanelNumber
               disableAdd={disableAdd}
@@ -329,39 +326,41 @@ const Bet: React.FC = () => {
             <ShortcutNumber setBetNumber={setBetNumber} setOdds={setOdds} />
           </AppContent>
         </AppContent>
-        <AppContent className='flex flex-col w-full h-[20%] border bg-gray-300 py-[1%]'>
+
+        <AppContent className='flex flex-col w-full border py-[1%]'>
+
           {/* Odd - Even */}
           <AppContent className='flex flex-row w-full content-center items-center'>
-              <p className='font-bold text-md px-2 w-[15%]' style={{ color: 'black' }}>COLOURS: </p>
+              <p className='font-bold text-md px-2 w-[15%]' style={{ color: 'black' }}>COULEURS: </p>
               <ExtrabetButton
                 value={{label:'Black', value: 2}}
                 bgColor='black'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd || (time <= 5)? true : false}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                Black
+                Noir
               </ExtrabetButton>
               <ExtrabetButton
                 value={{label:'Red', value: 2}}
                 bgColor='#ef4444'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center  border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center  border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                Red
+                Rouge
               </ExtrabetButton>
               <ExtrabetButton
                 value={{label:'Green', value: 36}}
                 bgColor='#16a34a'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                Green
+                Vert
               </ExtrabetButton>
           </AppContent>
 
@@ -372,8 +371,8 @@ const Bet: React.FC = () => {
                 value={{label:'1-12', value: 3}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
                 1-12
@@ -382,8 +381,8 @@ const Bet: React.FC = () => {
                 value={{label:'13-24', value: 3}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
                 13-24
@@ -392,8 +391,8 @@ const Bet: React.FC = () => {
                 value={{label:'25-36', value: 3}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
                 25-36
@@ -405,41 +404,41 @@ const Bet: React.FC = () => {
                 value={{label:'Low', value: 2}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                LOW
+                Low
               </ExtrabetButton>
               <ExtrabetButton
                 value={{label:'High', value: 2}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                HIGH
+                High
               </ExtrabetButton>
               <ExtrabetButton
                 value={{label:'Odd', value: 2}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                ODD
+                Impair
               </ExtrabetButton>
               <ExtrabetButton
                 value={{label:'Even', value: 2}}
                 bgColor='#64748b'
                 textColor='white'
-                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
-                disableAdd={disableAdd}
+                className='w-[15%] p-[1%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={(time <= 5)? true : false}
                 editBet={editBet}
               >
-                EVEN
+                Pair
               </ExtrabetButton>
           </AppContent>
 

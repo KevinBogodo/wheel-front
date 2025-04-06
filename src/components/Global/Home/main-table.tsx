@@ -81,7 +81,9 @@ const MainTable = ({lastUndredDraw, lastDraw}: Props) => {
       }
   
       // Comptage des occurrences de chaque numéro
-      numberStats[number].value++;
+      if(numberStats[number]) numberStats[number].value++;
+      // console.log(numberStats[number]);
+      
     });
   
     setFirst(first);

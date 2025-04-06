@@ -70,7 +70,7 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
                         value={300}
                         bgColor=''
                         textColor='white'
-                        className={`w-[30%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 300 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
+                        className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 300 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
@@ -80,7 +80,7 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
                         value={500}
                         bgColor=''
                         textColor='white'
-                        className={`w-[30%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 500 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
+                        className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 500 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
@@ -90,7 +90,7 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
                         value={1000}
                         bgColor=''
                         textColor='white'
-                        className={`w-[30%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 1000 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
+                        className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 1000 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
@@ -102,7 +102,7 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
                         value={1500}
                         bgColor=''
                         textColor='white'
-                        className={`w-[30%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 1500 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
+                        className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 1500 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
@@ -112,7 +112,7 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
                         value={5000}
                         bgColor=''
                         textColor='white'
-                        className={`w-[30%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 5000 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
+                        className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 5000 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
@@ -122,7 +122,7 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
                         value={10000}
                         bgColor=''
                         textColor='white'
-                        className={`w-[30%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 10000 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
+                        className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 10000 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
