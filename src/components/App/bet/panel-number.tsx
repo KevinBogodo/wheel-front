@@ -30,25 +30,25 @@ type Props = {
 const RouletteBoard = ({ disableAdd, editBet, isDisabled }: Props) => {
   return (
     <div className='flex-[6] flex-col w-full h-full justify-center items-center bg-gray-300'>
-      <div className='grid grid-cols-6 gap-[1%] p-[1%] border w-full h-[85%]'>
+      <div className='grid grid-cols-6 gap-[1%] w-full h-[85%]'>
         {rouletteNumbers.map((row, rowIndex) => (
           row.map((num) => (
             <NumberBord
               key={num}
               isDisabled={isDisabled || disableAdd}
               onClick={() => editBet(num, 'add')}
-              className={`text-2xl font-semibold w-full h-full flex items-center text-white justify-center border-gray-400 shadow-inner shadow-gray-200 ${numberColors[num as keyof typeof numberColors]}`}
+              className={`text-xl font-semibold w-full h-full flex items-center text-white justify-center border-gray-400 shadow-inner shadow-gray-200 ${numberColors[num as keyof typeof numberColors]}`}
             >
               {num}
             </NumberBord>
           ))
         ))}
       </div>
-      <div className='grid grid-cols-1 mt-2 w-full h-[10%]'>
+      <div className='grid grid-cols-1 mt-[1%] w-full h-[9%] bg-gre'>
         <NumberBord
           isDisabled={isDisabled || disableAdd}
           onClick={() => editBet(0, 'add')}
-          className={`text-2xl font-semibold w-full h-full flex items-center text-white justify-center border-gray-200 shadow-inner shadow-gray-200 ${numberColors[0]}`}
+          className={`text-2xl font-semibold w-full h-full flex items-center text-white justify-center  border-gray-800 shadow-inner shadow-gray-800 ${numberColors[0]}`}
         >
           0
         </NumberBord>

@@ -21,6 +21,8 @@ import AppContent from '@/components/Global/app-content';
 import ShortcutNumber from '@/components/App/bet/shortcut-number';
 import CashBack from '@/components/App/bet/cash-back';
 import { Button } from '@/components/ui/button';
+import NumberBord from '@/components/App/bet/number-bord';
+import ExtrabetButton from '@/components/App/bet/extrabet-button';
 
 const socket = io(`${api.SOCKET_URL}`);
 
@@ -32,6 +34,8 @@ const Bet: React.FC = () => {
   const startingSeconds = startingMinutes * 60;
   const [time, setTime] = useState(startingSeconds);
   const [betNumbers, setBetNumber] = useState<number[]>([]);
+  const [stack, setStack] = useState<number>(300);
+  const [choice, setChoice] = useState<any>({});
   const [odds, setOdds] = useState<number[]>([]);
   const [oddsSum, setOddsSum] = useState<number>(0);
   const [disableAdd, setDisableAdd] = useState<boolean>(false);
@@ -39,6 +43,7 @@ const Bet: React.FC = () => {
   const [currentBet, setCurrentBet] = useState({});
   const [tickets, setTickets] = useState<string[]>([]);
   const [printCashBack, setPrintCashBack] = useState<boolean>(false);
+  const [betAmount, setBetAmount] = useState<number>(0);
   
   const selectAplicationState = (state:RootState) => state.Application;
   const ApplicationProperties = createSelector(
@@ -73,7 +78,6 @@ const Bet: React.FC = () => {
   },[])
 
   const saveBet = useCallback(() => {
-    console.log("tickets", betNumbers);
 
     if (betNumbers.length > 0) {
       const objNumbers = betNumbers.reduce((acc, value, index) => {
@@ -82,17 +86,73 @@ const Bet: React.FC = () => {
       }, {} as Record<string, number>);
   
       const objOdds = odds.reduce((acc, value, index) => {
-        acc[`rt${index + 1}`] = value;
+        acc[`rt${index + 1}`] = 36;
         return acc;
       }, {} as Record<string, number>);
-  
+
+      let body: Record<string, any> = {
+        betAmount: betAmount,
+        rate: oddsSum,
+        amount: oddsSum*stack,
+        isRed: false,
+        isBlack: false,
+        isGreen: false,
+        isOdd: false,
+        isEven: false,
+        isDown: false,
+        isUp: false,
+        isDownBlack: false,
+        isDownRed: false,
+        isUpBlack: false,
+        isUpRed: false,
+        isFirst: false,
+        isSecond: false,
+        isThird: false,
+      }
+
+      switch (choice?.label) {
+        case 'Black':
+          body.isBlack = true;
+          break;
+        case 'Red':
+          body.isRed = true;
+          break;
+        case 'Green':
+          body.isGreen = true; // Green
+          break;
+        case '1-12':
+          body.isFirst = true; // 1-12
+          break;
+        case '13-24':
+          body.isSecond = true; // 13-24
+          break;
+        case '25-36':
+          body.isThird = true; // 25-36
+          break;
+        case 'Low': // 1-18
+          body.isDown = true; // 1-18
+          break;
+        case 'High': // 19-36
+          body.isUp = true; // 19-36
+          break;
+        case 'Odd': // Odd
+          body.isOdd = true; // Odd
+          break;
+        case 'Even': // Even
+          body.isEven = true; // Even
+          break;
+        default:
+          break;
+      }
+
       let param = {
         draw: openDraw?.drawId || '',
-        body: {...objNumbers, ...objOdds, 'amount': oddsSum*100}
+        body: {...body, ...objNumbers, ...objOdds}
       };
+      
       dispatch(placeBet(param));
     }
-  },[betNumbers, odds, openDraw, oddsSum]);
+  },[betNumbers, odds, openDraw, oddsSum, choice, betAmount, stack]);
 
   const saveCashBackBet = () => {
 
@@ -124,32 +184,38 @@ const Bet: React.FC = () => {
     },0) || 0;
   },[odds])
 
-  const editBet = useCallback((number: number, action: 'add' | 'sub') => {
-    const currentBet = [...betNumbers || []];
-    const currentOdds = [...odds || []];
+  const editBet = useCallback((number: number, action: 'add' | 'sub', value?: string) => {
+    
+    if (value) {
+      setChoice(value);
+    } else {
+      const currentBet = [...betNumbers || []];
+      const currentOdds = [...odds || []];
 
-    if ((action === 'add') && (getOddsSum() < 5)) {
-      if (currentBet.includes(number)) {
-        const betIndex = currentBet.indexOf(number);
-        currentOdds[betIndex]++
-      } else {
-        currentBet.push(number);
-        currentOdds.push(1);
-      }
-    } else if(action === 'sub') {
-      const betIndex = currentBet.indexOf(number);
-      if (betIndex !== -1) {
-        currentOdds[betIndex]--;
-        if (currentOdds[betIndex] <= 0) {
-          currentBet.splice(betIndex, 1);
-          currentOdds.splice(betIndex, 1);
+      if ((action === 'add') && (getOddsSum() < 5)) {
+        if (currentBet.includes(number)) {
+          const betIndex = currentBet.indexOf(number);
+          currentOdds[betIndex]
+        } else {
+          currentBet.push(number);
+          currentOdds.push(1);
         }
-      }
-    };
+      } else if(action === 'sub') {
+        const betIndex = currentBet.indexOf(number);
+        if (betIndex !== -1) {
+          currentOdds[betIndex]--;
+          if (currentOdds[betIndex] <= 0) {
+            currentBet.splice(betIndex, 1);
+            currentOdds.splice(betIndex, 1);
+          }
+        }
+      };
+  
+      setBetNumber(currentBet);
+      setOdds(currentOdds);
+    }
 
-    setBetNumber(currentBet);
-    setOdds(currentOdds);
-  },[betNumbers, odds]);
+  },[betNumbers, choice]);
 
   const selectFiveNumbers = (numbers: number[]) => {
     setBetNumber(numbers);
@@ -165,6 +231,7 @@ const Bet: React.FC = () => {
 
   const handleClearBet = useCallback(() => {
     setBetNumber([]);
+    setChoice({});
     setOdds([]);
   },[]);
 
@@ -219,14 +286,22 @@ const Bet: React.FC = () => {
   },[tickets]);
 
   useEffect(() => {
-      const sum:number = getOddsSum();
-      if (sum >= 5) {
+      const number:number = getOddsSum();
+      if (number >= 8) {
         setDisableAdd(true);
       } else {
         setDisableAdd(false);
       }
+      let sum = (number*36)+(choice?.value || 0)
+      console.log(sum);
+      
       setOddsSum(sum);
-  },[odds]);
+  },[odds,choice]);
+
+  useEffect(() => {
+    const val = betNumbers.length+((choice && choice.label) ? 1 : 0);
+    setBetAmount(val*stack)
+  }, [choice, betNumbers, stack]);
 
   useEffect(() => {
     if (placeBetSuccess && !error) {
@@ -241,10 +316,10 @@ const Bet: React.FC = () => {
     <AppContent className='flex fex-col w-full h-full mx-0'>
       {/* Left */}
       <AppContent className='flex-[2] w-full h-full'>
-        <AppContent className='flex w-full h-[11%]'>
+        <AppContent className='flex w-full h-[8%]'>
           <HeaderSession />
         </AppContent>
-        <AppContent className='flex w-full h-[60%]'>
+        <AppContent className='flex w-full h-[56%]'>
           <AppContent className='flex flex-row w-full h-full'>
             <PanelNumber
               disableAdd={disableAdd}
@@ -254,18 +329,118 @@ const Bet: React.FC = () => {
             <ShortcutNumber setBetNumber={setBetNumber} setOdds={setOdds} />
           </AppContent>
         </AppContent>
-        <AppContent className='flex flex-col w-full h-[25%] border'>
+        <AppContent className='flex flex-col w-full h-[20%] border bg-gray-300 py-[1%]'>
           {/* Odd - Even */}
-          <AppContent className='flex flex-row w-full'>
-              <p>COLOURS: </p>
-          </AppContent>
-
-          {/* Low - High */}
-          <AppContent className='flex flex-row w-full'>
+          <AppContent className='flex flex-row w-full content-center items-center'>
+              <p className='font-bold text-md px-2 w-[15%]' style={{ color: 'black' }}>COLOURS: </p>
+              <ExtrabetButton
+                value={{label:'Black', value: 2}}
+                bgColor='black'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd || (time <= 5)? true : false}
+                editBet={editBet}
+              >
+                Black
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'Red', value: 2}}
+                bgColor='#ef4444'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center  border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                Red
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'Green', value: 36}}
+                bgColor='#16a34a'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                Green
+              </ExtrabetButton>
           </AppContent>
 
           {/* Dozens */}
-          <AppContent className='flex flex-row w-full'>
+          <AppContent className='flex flex-row w-full mt-[1%] content-center items-center'>
+              <p className='font-bold text-md px-2 w-[15%]' style={{ color: 'black' }}>DOZENS: </p>
+              <ExtrabetButton
+                value={{label:'1-12', value: 3}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                1-12
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'13-24', value: 3}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                13-24
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'25-36', value: 3}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                25-36
+              </ExtrabetButton>
+          </AppContent>
+
+          <AppContent className='flex flex-row w-full mt-[1%] content-center items-center'>
+              <ExtrabetButton
+                value={{label:'Low', value: 2}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                LOW
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'High', value: 2}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                HIGH
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'Odd', value: 2}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                ODD
+              </ExtrabetButton>
+              <ExtrabetButton
+                value={{label:'Even', value: 2}}
+                bgColor='#64748b'
+                textColor='white'
+                className='w-[15%] px-[3%] mx-[1%] font-semibold flex items-center text-white justify-center border-gray-800 shadow-inner shadow-gray-800'
+                disableAdd={disableAdd}
+                editBet={editBet}
+              >
+                EVEN
+              </ExtrabetButton>
           </AppContent>
 
         </AppContent>
@@ -273,25 +448,27 @@ const Bet: React.FC = () => {
 
       {/* Right */}
       {currentUserRole === 'cashier' &&
-        <AppContent className='flex-[1] flex-col w-full h-full bg-accent'>
+        <AppContent className='flex-[1] flex-col w-full h-auto bg-accent'>
           <AppContent className='flex flex-col w-full h-[60%] mb-2'>
             <PanelPreview
-              editBet={editBet}
+              setStack={setStack}
+              stack={stack}
               odds={odds || []}
               oddsSum={oddsSum}
               saveBet={saveBet}
               handleClearBet={handleClearBet}
+              choice={choice}
               betNumbers={betNumbers || []}
+              betAmount={betAmount}
               isDisabled={(time <= 5)? true : false}
             />
             <ScanTicketBar />
-            <Separator className='my-5'/>
             <Separator className='my-5'/>
           </AppContent>
           {lastBets.length > 0 && <AppContent className='w-full [40%] p-2'>
             <LatestBet lastBets={lastBets} rePrintBet={rePrintBet} />
           </AppContent>}
-          <CashBack tickets={tickets} printCashBack={printCashBack} setTickets={setTickets} saveCashBackBet={saveCashBackBet}/>
+          {/* <CashBack tickets={tickets} printCashBack={printCashBack} setTickets={setTickets} saveCashBackBet={saveCashBackBet}/> */}
         </AppContent>
       }
 
