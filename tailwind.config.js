@@ -106,6 +106,24 @@ export default {
 			blink: {
 				"50%": { borderColor: "#ff0000" },
 			},
+			pop_in: {
+				'0%': {
+				  transform: 'scale(0.2)',
+				  opacity: 0
+				},
+				'60%': {
+				  transform: 'scale(1.1)',
+				  opacity: 1
+				},
+				'80%': {
+				  transform: 'scale(0.97)',
+				},
+				'100%': {
+				  transform: 'scale(1)'
+				}
+			  },
+
+			
   		}
   	}
   },

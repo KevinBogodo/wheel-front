@@ -10,7 +10,7 @@ import MainDrawNumber from "@/components/Global/Home/main-draw-number";
 import MainTable from "@/components/Global/Home/main-table";
 
 
-// import logo from '../assets/images/logo.png';
+import logo from '../assets/images/logo.png';
 
 const WheelOfFortune = () => {
 
@@ -74,7 +74,6 @@ const WheelOfFortune = () => {
   return (
     <div className="flex flex-row w-full h-full bg-[url('/red.jpg')] overflow-hidden">
     {/* <div className="flex flex-row w-full h-full bg-[url('/blue.jpg')] overflow-hidden"> */}
-    {/* <div className="flex flex-row w-full h-full overflow-hidden"> */}
 
       {/* left */}
       <div className="flex-[15%] flex-row">

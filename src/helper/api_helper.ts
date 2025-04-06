@@ -17,11 +17,11 @@ if(token && token.length >0)  axios.defaults.headers.common["Authorization"] = "
 //interceptor on send
 axios.interceptors.request.use(
     (config) => {
-        nprogress.start();
+        // nprogress.start();
         return config;
     },
     (error) => {
-        nprogress.done();
+        // nprogress.done();
         return Promise.reject(error);
     }
 ) 
@@ -29,7 +29,7 @@ axios.interceptors.request.use(
 // Interceptor to capture errors
 axios.interceptors.response.use(
     function (response) {
-        nprogress.done();
+        // nprogress.done();
         return response.data || response;
     },
 

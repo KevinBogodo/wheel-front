@@ -105,53 +105,53 @@ const MainTable = ({lastUndredDraw, lastDraw}: Props) => {
   
   return (
     <div className="flex flex-col items-center w-full h-full">
-      <div className="flex flex-row w-full h-full gap-5 p-5">
+      <div className="flex flex-row w-full h-full gap-5 pt-[5%] px-1 font-bold">
         <div className="flex-[2] w-full h-full">
-          <table className=" w-full h-full p-2">
+          <table className=" w-full h-full px-2">
             <thead>
               <tr>
-                <th colSpan={2} className="font-semibold">
+                <td colSpan={2} className="font-bold text-lg" style={{ color: '#fff' }}>
                     PAY TABLE
-                </th>
+                </td>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td rowSpan={3} className="border border-gray-400 w-3/4 p-1 font-semibold text-center">COLOR</td>
-                <td className="border border-gray-400 w-1/4 p-1 bg-black text-center">2</td>
+                <td rowSpan={3} className="border border-gray-400 w-3/4 font-bold text-lg text-center" style={{ color: '#fff' }}>COLOR</td>
+                <td className="border border-gray-400 w-1/4 bg-black  font-bold text-lg text-center" style={{ color: '#fff' }}>2</td>
               </tr>
               <tr>
-                <td className="border border-gray-400 w-1/4 p-1 bg-red-600 text-center">2</td>
+                <td className="border border-gray-400 w-1/4 bg-red-600 font-bold text-lg text-center" style={{ color: '#fff' }}>2</td>
               </tr>
               <tr>
-                <td className="border border-gray-400 w-1/4 p-1 bg-green-600 text-center">36</td>
+                <td className="border border-gray-400 w-1/4 bg-green-600 font-bold text-lg text-center" style={{ color: '#fff' }}>36</td>
               </tr>
               <tr>
-                <td className="border border-gray-400 w-3/4 p-1 font-semibold text-center">DOZENS</td>
-                <td className="border border-gray-400 w-1/4 p-1 text-center bg-gray-300 text-black">3</td>
+                <td className="border border-gray-400 w-3/4 font-bold text-lg text-center" style={{ color: '#fff' }}>DOZENS</td>
+                <td className="border border-gray-400 w-1/4 font-bold text-lg  text-center bg-gray-300" style={{ color: '#000' }}>3</td>
               </tr>
               <tr>
-                <td className="border border-gray-400 w-3/4 p-1 font-semibold text-center">EVEN / ODD</td>
-                <td className="border border-gray-400 w-1/4 p-1 text-center bg-gray-300 text-black">2</td>
+                <td className="border border-gray-400 w-3/4 font-bold text-lg  text-center" style={{ color: '#fff' }}>EVEN / ODD</td>
+                <td className="border border-gray-400 w-1/4 font-bold text-lg  text-center bg-gray-300" style={{ color: '#000' }}>2</td>
               </tr>
               <tr>
-                <td className="border border-gray-400 w-3/4 p-1 font-semibold text-center">LOW / HIGH</td>
-                <td className="border border-gray-400 w-1/4 p-1 text-center bg-gray-300 text-black">2</td>
+                <td className="border border-gray-400 w-3/4 font-bold text-lg text-center" style={{ color: '#fff' }}>LOW / HIGH</td>
+                <td className="border border-gray-400 w-1/4 font-bold text-lg text-center bg-gray-300" style={{ color: '#000' }}>2</td>
               </tr>
               <tr>
-                <td className="border border-gray-400 w-3/4 p-1 font-semibold text-center">NUMBER</td>
-                <td className="border border-gray-400 w-1/4 p-1 text-center bg-gray-300 text-black">36</td>
+                <td className="border border-gray-400 w-3/4 font-bold text-lg text-center" style={{ color: '#fff' }}>NUMBER</td>
+                <td className="border border-gray-400 w-1/4 font-bold text-lg text-center bg-gray-300" style={{ color: '#000' }}>36</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="flex-[1] w-full h-full">
-          <table className="w-full h-full p-2">
+          <table className="w-full h-full px-2">
             <thead>
               <tr>
-                <th colSpan={2} className="font-semibold">
+                <td colSpan={2} className="font-bold text-lg" style={{ color: '#fff' }}>
                     LATEST GAMES
-                </th>
+                </td>
               </tr>
             </thead>
             <tbody>
@@ -170,10 +170,10 @@ const MainTable = ({lastUndredDraw, lastDraw}: Props) => {
 
                 return (
                   <tr key={index}>
-                    <td className="border border-gray-400 w-3/4 p-1 font-semibold text-center">
+                    <td className="border border-gray-400 w-3/4 font-bold text-lg text-center" style={{ color: '#fff' }}>
                       #{row.numbers}
                     </td>
-                    <td className={`border border-gray-400 w-1/4 p-1 text-center ${getBackgroundColor(row.no1)}`}>
+                    <td className={`border border-gray-400 w-1/4 font-bold text-lg text-center ${getBackgroundColor(row.no1)}`} style={{ color: '#fff' }}>
                       {row.no1}
                     </td>
                   </tr>
@@ -183,9 +183,9 @@ const MainTable = ({lastUndredDraw, lastDraw}: Props) => {
           </table>
         </div>
       </div>
-      <div className="flex flex-col w-full h-full p-5 items-center">
-        <p className="font-semibold py-1">STATISTICS</p>
-        <div className="border-2 border-gray-400 w-full h-full p-3">
+      <div className="flex flex-col w-full h-full p-[1%] items-center">
+        <p className="font-bold py-1 text-lg" style={{ color: '#fff' }}>STATISTICS</p>
+        <div className="border border-gray-400 w-full h-full p-3">
         
             {/*  Number stat */}
             <MainNumberStats numbers={numbers} />

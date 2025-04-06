@@ -26,10 +26,10 @@ const MainNumberStats = ({ numbers }: Props) => {
 
   return (
     <>
-      <table className="w-full p-2">
+      <table className="w-full p-[1%]">
         <thead>
           <tr>
-            <td colSpan={6} className="p-2 font-semibold">
+            <td colSpan={6} className="p-[1%] font-bold text-lg" style={{ color: '#fff' }}>
               NUMBERS (LASTEST 120 DRAWS)
             </td>
           </tr>
@@ -42,10 +42,10 @@ const MainNumberStats = ({ numbers }: Props) => {
                 const statValue = numberStatsMap.get(number) || 0;
                 return (
                   <React.Fragment key={number}>
-                    <td className={`border border-gray-400 p-1 w-1/12 font-semibold text-center ${color === 'red' ? 'bg-red-600' : 'bg-black'}`}>
+                    <td className={`border border-gray-400 p-[0] w-1/12 font-bold text-lg text-center ${color === 'red' ? 'bg-red-600' : 'bg-black'}`} style={{ color: '#fff' }}>
                       {number}
                     </td>
-                    <td className="border border-gray-400 p-1 w-2/12 px-2 font-semibold text-center">
+                    <td className="border border-gray-400 p-[0] w-2/12 px-2 font-bold text-lg text-center" style={{ color: '#fff' }}>
                       {statValue}
                     </td>
                   </React.Fragment>
@@ -58,8 +58,8 @@ const MainNumberStats = ({ numbers }: Props) => {
       <table className="w-full">
         <tbody>
           <tr>
-            <td className="border border-gray-400 p-1 w-1/2 font-semibold text-center bg-green-600">0</td>
-            <td className="border border-gray-400 p-1 w-1/2 font-semibold text-center">{numberStatsMap.get(0) || 0}</td>
+            <td className="border border-gray-400 p-[0] w-1/2 font-bold text-lg text-center bg-green-600" style={{ color: '#fff' }}>0</td>
+            <td className="border border-gray-400 p-[0] w-1/2 font-bold text-lg text-center" style={{ color: '#fff' }}>{numberStatsMap.get(0) || 0}</td>
           </tr>
         </tbody>
       </table>

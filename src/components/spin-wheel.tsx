@@ -18,6 +18,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [winner, setWinner] = useState<number | null>(winningNumber);
+  const [winnerColor, setWinnerColor] = useState<string | null>('radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%)');
   const [isSpinning, setIsSpinning] = useState(false);
   const [canvasSize, setCanvasSize] = useState({ width: 800, height: 800 });
 
@@ -76,6 +77,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     
     // Set winner immediately when component mounts
     setWinner(winningNumber);
+    setWinnerColor(getColorForSegment(winningNumber));
     
     // Initial rotation to position winning number at the pointer
     const initialRotation = getInitialRotation(winningNumber);
@@ -238,11 +240,11 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     }
 
     // Add the numbers with responsive font size
-    const fontSize = Math.max(canvas.width * 0.025, 12); // Min font size of 12px
+    const fontSize = Math.max(canvas.width * 0.035, 12); // Min font size of 12px
     
     for (let i = 0; i < numSegments; i++) {
       const angle = angleStep * i + rotationAngle + angleStep / 2;
-      const textRadius = radius - (radius * 0.13); // Proportional text placement
+      const textRadius = radius - (radius * 0.07); // Proportional text placement
       const x = Math.cos(angle) * textRadius;
       const y = Math.sin(angle) * textRadius;
       
@@ -269,14 +271,17 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
 
   // Draw the initial wheel with proper positioning
   useEffect(() => {
+    // Set winner immediately when component mounts
+    setWinner(winningNumber);
+    setWinnerColor(getColorForSegment(winningNumber));
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set winner immediately when component mounts
-    setWinner(winningNumber);
+
     
     // Initial rotation to position winning number at the pointer
     const initialRotation = getInitialRotation(winningNumber);
@@ -289,6 +294,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     
     setIsSpinning(true);
     setWinner(null);
+    setWinnerColor('radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%)');
     
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -334,6 +340,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
         requestAnimationFrame(animate);
       } else {
         setWinner(winningNumber);
+        setWinnerColor(getColorForSegment(winningNumber));
         setIsSpinning(false);
         setStart(false);
       }
@@ -367,6 +374,7 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
         }}
       ></div>
       
+      
       {/* Canvas centré */}
       <canvas 
         ref={canvasRef} 
@@ -378,11 +386,12 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
       {/* Pointeur avec taille responsive */}
       <div 
         id="pointer" 
-        style={{ 
+        style={{
           zIndex: 10,
-          fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.04)` 
+          fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.04)`
         }}
       ></div>
+     
       
       {/* Conteneur pour wheel02.png qui entoure le winnerCircle */}
       <div 
@@ -402,13 +411,29 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
       >
         {/* Cercle du gagnant avec taille responsive */}
         <div 
-          id="winnerCircle" 
+          // id="winnerCircle" 
           style={{ 
             zIndex: 999,
             width: '94%',
             height: '95%',
-            fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.12)` // Font size proportionnelle
+            fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.12)`,
+            // backgroundColor: winnerColor || 'radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%)',
+            background: winnerColor || 'radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%)',
+
+            borderRadius: '50%',
+            // border: '4px solid #d4b923',
+            boxShadow: `
+              0px 0px 20px 10px rgba(28, 28, 28, 0.8),
+              inset 0px 0px 10px 5px rgba(255, 255, 255, 0.3)
+            `,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#fff', // texte blanc sur fond noir
+            textShadow: '0px 1px 2px rgba(255, 255, 255, 0.5)',
+            transition: 'all 0.2s ease-in-out',
           }}
+          className='animate-pop_in'
         >
           {winner !== null ? winner : ''}
         </div>
