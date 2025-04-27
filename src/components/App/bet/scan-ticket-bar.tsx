@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
 import { Ban, Check, CircleAlert, CircleCheck, CircleX, RefreshCw } from 'lucide-react';
 import 'react-toastify/dist/ReactToastify.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
 
 
 const ScanTicketBar = ({ refresh }: Props) => {
+    const scanRef = useRef<HTMLInputElement>(null);
     const dispatch:AppDispatch = useDispatch();
     const selectLayoutState = (state:RootState) => state.Application
     const ApplicationProperties = createSelector(
@@ -34,11 +35,15 @@ const ScanTicketBar = ({ refresh }: Props) => {
     const [modal, setModal] = useState<boolean>(false);
     const [ticket, setTicket] = useState({});
 
+    useEffect(() => {
+        scanRef.current?.focus(); // Focus au chargement
+    }, []);
+
 
     const handleCheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
           if (betNumber.length > 5) {
-            dispatch(getCheckBet(betNumber));
+            dispatch(getCheckBet(betNumber.toUpperCase()));
           }
         }
     };
@@ -55,6 +60,7 @@ const ScanTicketBar = ({ refresh }: Props) => {
         if (modal) {
             setTicket({});
             setModal(false);
+            scanRef.current?.focus();
         } else {
             setModal(true);
         }
@@ -76,6 +82,9 @@ const ScanTicketBar = ({ refresh }: Props) => {
             if (refresh) {
                 refresh();
             }
+            setTimeout(() => {
+                scanRef.current?.focus();
+            }, 100);
         }
     },[cashoutSuccess, cashoutBet]);
 
@@ -84,9 +93,10 @@ const ScanTicketBar = ({ refresh }: Props) => {
             <div className="flex flex-col p-2">
                 <p className="font-medium">Scanner un ticket:</p>
                 <Input
+                    ref={scanRef}
                     value={betNumber}
-                    placeholder='20250128081015005'
-                    onChange={(e) => setBetNumber(e.target.value)}
+                    placeholder='S81015005'
+                    onChange={(e) => setBetNumber(e.target.value.toUpperCase())}
                     onKeyDown={handleCheck}
                 />
             </div>
@@ -141,7 +151,7 @@ const ScanTicketBar = ({ refresh }: Props) => {
 
                         <Separator className='my-5' />
                         <div className='inline-flex gap-2 '>
-                            <Button className='bg-red-400' onClick={toggle}>
+                            <Button className='bg-red-400' onClick={() => toggle()}>
                                 <Ban className='w-20 h-20'/>
                                 Fermer
                             </Button>
@@ -152,7 +162,6 @@ const ScanTicketBar = ({ refresh }: Props) => {
                                 </Button>
                             }
                         </div>
-
                     </div>
                 </DialogContent>
             </Dialog>

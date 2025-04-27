@@ -1,9 +1,9 @@
 {
-  "name": "ltmt-front",
+  "name": "spin-front",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "proxy": "http://localhost:400",
+  "homepage": "",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

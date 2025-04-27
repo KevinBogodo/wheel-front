@@ -1,5 +1,5 @@
 import UserAuthForm from './components/user-auth-form';
-import photo from '@/assets/images/loto_bg.jpg';
+// import photo from '@/assets/images/loto_bg.jpg';
 
 
 const Authentification = () => {

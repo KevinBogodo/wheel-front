@@ -7,7 +7,7 @@ interface BarcodeGeneratorProps {
   height?: string | number;
 }
 
-const BarcodeGenerator: React.FC<BarcodeGeneratorProps> = ({ value, width = "100%", height = 100 }) => {
+const BarcodeGenerator: React.FC<BarcodeGeneratorProps> = ({ value }) => {
   console.log(value);
   
   return (

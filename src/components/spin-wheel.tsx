@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import SpinButton from './spin-button';
 import './SpinWheel.css';
 
 interface SpinWheelProps {
@@ -125,90 +124,90 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
   };
 
   // Draw wheel shadow - REDUCED
-  const drawWheelShadow = (ctx: CanvasRenderingContext2D, radius: number, borderWidth: number) => {
-    ctx.save();
+  // const drawWheelShadow = (ctx: CanvasRenderingContext2D, radius: number, borderWidth: number) => {
+  //   ctx.save();
     
-    // Create a more subtle shadow around the wheel
-    // Similar to but softer than: box-shadow: 0px 0px 40px 10px rgba(9, 9, 9, 0.921);
-    const shadowSize = 25; // Reduced from 40 to 25
-    const totalRadius = radius + borderWidth + shadowSize;
+  //   // Create a more subtle shadow around the wheel
+  //   // Similar to but softer than: box-shadow: 0px 0px 40px 10px rgba(9, 9, 9, 0.921);
+  //   const shadowSize = 25; // Reduced from 40 to 25
+  //   const totalRadius = radius + borderWidth + shadowSize;
     
-    // Create a radial gradient for the shadow
-    const shadowGradient = ctx.createRadialGradient(
-      0, 0, radius + borderWidth - 5, // Inner radius just inside the border
-      0, 0, totalRadius // Outer radius includes shadow
-    );
+  //   // Create a radial gradient for the shadow
+  //   const shadowGradient = ctx.createRadialGradient(
+  //     0, 0, radius + borderWidth - 5, // Inner radius just inside the border
+  //     0, 0, totalRadius // Outer radius includes shadow
+  //   );
     
-    shadowGradient.addColorStop(0, 'rgba(9, 9, 9, 0.5)'); // Reduced opacity from 0.921 to 0.5
-    shadowGradient.addColorStop(0.4, 'rgba(9, 9, 9, 0.3)'); // Reduced opacity
-    shadowGradient.addColorStop(0.8, 'rgba(9, 9, 9, 0.1)'); // Reduced opacity
-    shadowGradient.addColorStop(1, 'rgba(9, 9, 9, 0)'); // Fade to transparent
+  //   shadowGradient.addColorStop(0, 'rgba(9, 9, 9, 0.5)'); // Reduced opacity from 0.921 to 0.5
+  //   shadowGradient.addColorStop(0.4, 'rgba(9, 9, 9, 0.3)'); // Reduced opacity
+  //   shadowGradient.addColorStop(0.8, 'rgba(9, 9, 9, 0.1)'); // Reduced opacity
+  //   shadowGradient.addColorStop(1, 'rgba(9, 9, 9, 0)'); // Fade to transparent
     
-    // Draw the shadow as a ring around the wheel
-    ctx.beginPath();
-    ctx.arc(0, 0, totalRadius, 0, 2 * Math.PI);
-    ctx.arc(0, 0, radius + borderWidth - 5, 0, 2 * Math.PI, true); // Cut out the inside
-    ctx.fillStyle = shadowGradient;
-    ctx.fill();
+  //   // Draw the shadow as a ring around the wheel
+  //   ctx.beginPath();
+  //   ctx.arc(0, 0, totalRadius, 0, 2 * Math.PI);
+  //   ctx.arc(0, 0, radius + borderWidth - 5, 0, 2 * Math.PI, true); // Cut out the inside
+  //   ctx.fillStyle = shadowGradient;
+  //   ctx.fill();
     
-    ctx.restore();
-  };
+  //   ctx.restore();
+  // };
 
   // Draw gold border
-  const drawGoldBorder = (ctx: CanvasRenderingContext2D, radius: number) => {
-    const borderWidth = radius * 0.05; // Width of the gold border proportional to radius
+  // const drawGoldBorder = (ctx: CanvasRenderingContext2D, radius: number) => {
+  //   const borderWidth = radius * 0.05; // Width of the gold border proportional to radius
     
-    ctx.save();
+  //   ctx.save();
     
-    // Draw the wheel shadow first (behind everything)
-    drawWheelShadow(ctx, radius, borderWidth);
+  //   // Draw the wheel shadow first (behind everything)
+  //   drawWheelShadow(ctx, radius, borderWidth);
     
-    // Gold border with gradient similar to winnerCircle
-    const goldGradient = ctx.createRadialGradient(
-      0, 0, radius,
-      0, 0, radius + borderWidth
-    );
-    goldGradient.addColorStop(0, '#f9e547');
-    goldGradient.addColorStop(0.4, '#e7d323');
-    goldGradient.addColorStop(1, '#b6a71d');
+  //   // Gold border with gradient similar to winnerCircle
+  //   const goldGradient = ctx.createRadialGradient(
+  //     0, 0, radius,
+  //     0, 0, radius + borderWidth
+  //   );
+  //   goldGradient.addColorStop(0, '#f9e547');
+  //   goldGradient.addColorStop(0.4, '#e7d323');
+  //   goldGradient.addColorStop(1, '#b6a71d');
     
-    ctx.beginPath();
-    ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-    ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
-    ctx.fillStyle = goldGradient;
-    ctx.fill();
+  //   ctx.beginPath();
+  //   ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
+  //   ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
+  //   ctx.fillStyle = goldGradient;
+  //   ctx.fill();
     
-    // Add thin border
-    ctx.beginPath();
-    ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-    ctx.lineWidth = radius * 0.01; // Proportional line width
-    ctx.strokeStyle = '#d4b923';
-    ctx.stroke();
+  //   // Add thin border
+  //   ctx.beginPath();
+  //   ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
+  //   ctx.lineWidth = radius * 0.01; // Proportional line width
+  //   ctx.strokeStyle = '#d4b923';
+  //   ctx.stroke();
     
-    // Inner border
-    ctx.beginPath();
-    ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-    ctx.lineWidth = radius * 0.01; // Proportional line width
-    ctx.strokeStyle = '#d4b923';
-    ctx.stroke();
+  //   // Inner border
+  //   ctx.beginPath();
+  //   ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+  //   ctx.lineWidth = radius * 0.01; // Proportional line width
+  //   ctx.strokeStyle = '#d4b923';
+  //   ctx.stroke();
     
-    // Add inner highlights
-    const innerHighlight = ctx.createRadialGradient(
-      0, 0, radius,
-      0, 0, radius + borderWidth
-    );
-    innerHighlight.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
-    innerHighlight.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
-    innerHighlight.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
+  //   // Add inner highlights
+  //   const innerHighlight = ctx.createRadialGradient(
+  //     0, 0, radius,
+  //     0, 0, radius + borderWidth
+  //   );
+  //   innerHighlight.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+  //   innerHighlight.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
+  //   innerHighlight.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
     
-    ctx.beginPath();
-    ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-    ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
-    ctx.fillStyle = innerHighlight;
-    ctx.fill();
+  //   ctx.beginPath();
+  //   ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
+  //   ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
+  //   ctx.fillStyle = innerHighlight;
+  //   ctx.fill();
     
-    ctx.restore();
-  };
+  //   ctx.restore();
+  // };
 
   // Draw the wheel
   const drawWheel = (ctx: CanvasRenderingContext2D, rotationAngle: number = 0) => {
@@ -365,16 +364,15 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
       <div 
         className="absolute inset-0 bg-no-repeat bg-center bg-contain"
         style={{ 
-          backgroundImage: 'url(/wheel01.png)',
+          backgroundImage: 'url(./wheel01.png)',
+          // backgroundImage: `url('${import.meta.env.BASE_URL}wheel01.jpg')`,
           width: '120%', 
           height: '120%', 
           left: '-10%', 
           top: '-10%',
-          zIndex: 0 
+          zIndex: 0
         }}
       ></div>
-      
-      
       {/* Canvas centré */}
       <canvas 
         ref={canvasRef} 
@@ -400,7 +398,8 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
           zIndex: 998,
           width: '25%',
           height: '25%',
-          backgroundImage: 'url(/wheel02.png)',
+          // backgroundImage: 'url(./wheel02.png)',
+          backgroundImage: `url('${import.meta.env.BASE_URL}wheel02.jpg')`,
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

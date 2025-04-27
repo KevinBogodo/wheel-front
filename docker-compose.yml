@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  spin-front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spin-front:latest
+    container_name: spin-front
+    ports:
+      - "3001:80"
+    restart: always

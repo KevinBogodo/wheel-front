@@ -22,7 +22,7 @@ const MainDrawNumber = ({ drawNumber, setDrawNumber}: Props) => {
     },[]);
     
   return (
-    <h5 className="m-auto px-2 w-5/6 h-1/3 bg-gray-300 text-center place-content-center justify-center shadow-gray-900 shadow text-4xl text-black font-semibold">
+    <h5 className="m-auto p-auto w-5/6 h-1/3 bg-gray-300 text-center place-content-center justify-center shadow-gray-900 shadow text-6xl text-black font-semibold">
       #{drawNumber}
     </h5>
   )

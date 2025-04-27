@@ -1,5 +1,4 @@
 import { Card } from '@/components/ui/card'
-import NumberBord from './number-bord'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { Ban, Check } from 'lucide-react'
@@ -19,7 +18,7 @@ type Props = {
     isDisabled: boolean
 }
 
-const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, setStack, handleClearBet, saveBet, isDisabled }: Props) => {
+const PanelPreview = ({ betNumbers, betAmount, choice, oddsSum, stack, setStack, handleClearBet, saveBet, isDisabled }: Props) => {
 
     return (
         <div className='flex flex-col w-full p-2 mx-auto'>
@@ -67,14 +66,14 @@ const PanelPreview = ({ betNumbers, betAmount, choice, odds, oddsSum, stack, set
             <Card className='flex flex-col content-center w-full p-2 rounded-none'>
                 <div className='flex flex-row w-full justify-center items-center'>
                     <ExtrabetButton
-                        value={300}
+                        value={250}
                         bgColor=''
                         textColor='white'
                         className={`w-[30%] p-[3%] rounded-sm mx-[1%] font-semibold flex items-center text-white justify-center ${stack === 300 ? `border-gray-800 shadow-inner shadow-gray-800 bg-slate-700` : `border-gray-800 shadow-md shadow-gray-800 bg-slate-500`}`}
                         disableAdd={false}
                         editBet={setStack}
                     >
-                        300
+                        250
                     </ExtrabetButton>
                     <ExtrabetButton
                         value={500}

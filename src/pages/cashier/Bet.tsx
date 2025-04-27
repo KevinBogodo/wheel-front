@@ -11,7 +11,7 @@ import PanelNumber from '@/components/App/bet/panel-number';
 import PanelPreview from '@/components/App/bet/panel-preview';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { getLatestBet, placeBet, placeCashBackBet } from '@/slice/thunks';
+import { getLatestBet, placeBet } from '@/slice/thunks';
 import { createSelector } from '@reduxjs/toolkit';
 import LatestBet from '@/components/App/bet/latest-bet';
 import ScanTicketBar from '@/components/App/bet/scan-ticket-bar';
@@ -19,9 +19,9 @@ import { Separator } from '@/components/ui/separator';
 import BetTicket from '@/components/App/bet/bet-ticket';
 import AppContent from '@/components/Global/app-content';
 import ShortcutNumber from '@/components/App/bet/shortcut-number';
-import CashBack from '@/components/App/bet/cash-back';
-import { Button } from '@/components/ui/button';
-import NumberBord from '@/components/App/bet/number-bord';
+// import CashBack from '@/components/App/bet/cash-back';
+// import { Button } from '@/components/ui/button';
+// import NumberBord from '@/components/App/bet/number-bord';
 import ExtrabetButton from '@/components/App/bet/extrabet-button';
 
 const socket = io(`${api.SOCKET_URL}`);
@@ -34,7 +34,7 @@ const Bet: React.FC = () => {
   const startingSeconds = startingMinutes * 60;
   const [time, setTime] = useState(startingSeconds);
   const [betNumbers, setBetNumber] = useState<number[]>([]);
-  const [stack, setStack] = useState<number>(300);
+  const [stack, setStack] = useState<number>(250);
   const [choice, setChoice] = useState<any>({});
   const [odds, setOdds] = useState<number[]>([]);
   const [oddsSum, setOddsSum] = useState<number>(0);
@@ -42,7 +42,7 @@ const Bet: React.FC = () => {
   const [openDraw, setOpneDraw] = useState<{drawId: string, nexDrawNumber: number}>();
   const [currentBet, setCurrentBet] = useState({});
   const [tickets, setTickets] = useState<string[]>([]);
-  const [printCashBack, setPrintCashBack] = useState<boolean>(false);
+  // const [printCashBack, setPrintCashBack] = useState<boolean>(false);
   const [betAmount, setBetAmount] = useState<number>(0);
   
   const selectAplicationState = (state:RootState) => state.Application;
@@ -85,14 +85,14 @@ const Bet: React.FC = () => {
         return acc;
       }, {} as Record<string, number>);
   
-      const objOdds = odds.reduce((acc, value, index) => {
+      const objOdds = odds.reduce((acc, index) => {
         acc[`rt${index + 1}`] = 36;
         return acc;
       }, {} as Record<string, number>);
 
       let body: Record<string, any> = {
         betAmount: betAmount,
-        rate: oddsSum,
+        rate: stack,
         amount: oddsSum*stack,
         isRed: false,
         isBlack: false,
@@ -154,29 +154,29 @@ const Bet: React.FC = () => {
     }
   },[betNumbers, odds, openDraw, oddsSum, choice, betAmount, stack]);
 
-  const saveCashBackBet = () => {
+  // const saveCashBackBet = () => {
 
-    if (betNumbers.length > 0) {
-      const objNumbers = betNumbers.reduce((acc, value, index) => {
-        acc[`no${index + 1}`] = value;
-        return acc;
-      }, {} as Record<string, number>);
+  //   if (betNumbers.length > 0) {
+  //     const objNumbers = betNumbers.reduce((acc, value, index) => {
+  //       acc[`no${index + 1}`] = value;
+  //       return acc;
+  //     }, {} as Record<string, number>);
   
-      const objOdds = odds.reduce((acc, value, index) => {
-        acc[`rt${index + 1}`] = value;
-        return acc;
-      }, {} as Record<string, number>);
+  //     const objOdds = odds.reduce((acc, value, index) => {
+  //       acc[`rt${index + 1}`] = value;
+  //       return acc;
+  //     }, {} as Record<string, number>);
 
-      let param = {
-        draw: openDraw?.drawId || '',
-        body: {
-          bet: {...objNumbers, ...objOdds, 'amount': 0},
-          tickets: tickets
-        }
-      };
-      dispatch(placeCashBackBet(param));
-    }
-  };
+  //     let param = {
+  //       draw: openDraw?.drawId || '',
+  //       body: {
+  //         bet: {...objNumbers, ...objOdds, 'amount': 0},
+  //         tickets: tickets
+  //       }
+  //     };
+  //     dispatch(placeCashBackBet(param));
+  //   }
+  // };
 
   const getOddsSum = useCallback(() => {
     return odds?.reduce((prevSum, currentVal) => {
@@ -217,10 +217,10 @@ const Bet: React.FC = () => {
 
   },[betNumbers, choice]);
 
-  const selectFiveNumbers = (numbers: number[]) => {
-    setBetNumber(numbers);
-    setOdds([1,1,1,1,1]);
-  }
+  // const selectFiveNumbers = (numbers: number[]) => {
+  //   setBetNumber(numbers);
+  //   setOdds([1,1,1,1,1]);
+  // }
 
   const rePrintBet = (bet: any) => {
     if (bet && bet.id) {
@@ -279,7 +279,7 @@ const Bet: React.FC = () => {
 
   useEffect(() => {
     if (tickets.length === 10) {
-      setPrintCashBack(true);
+      // setPrintCashBack(true);
     }
   },[tickets]);
 
@@ -302,7 +302,7 @@ const Bet: React.FC = () => {
   useEffect(() => {
     if (placeBetSuccess && !error) {
       setCurrentBet(bet);
-      setPrintCashBack(false);
+      // setPrintCashBack(false);
       setTickets([]);
       printFn();
     }
@@ -472,7 +472,7 @@ const Bet: React.FC = () => {
       }
 
       <div ref={ticketRef} className='w-[300px] hidden print:block'>
-        <BetTicket currentBet={currentBet} />
+        <BetTicket currentBet={currentBet} openDraw={openDraw} />
       </div>
     </AppContent>
   )

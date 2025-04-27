@@ -3,10 +3,14 @@ import BarcodeGenerator from '@/components/Global/barcode-generator';
 import moment from 'moment';
 
 type Props = {
-    currentBet: any
+    currentBet: any,
+    openDraw: any
 }
 
-const BetTicket = ({ currentBet}: Props) => {
+const BetTicket = ({ currentBet, openDraw}: Props) => {
+
+    console.log(currentBet);
+    
 
     return (
         <div className='w-full'>
@@ -21,7 +25,7 @@ const BetTicket = ({ currentBet}: Props) => {
                             Spin + Win
                         </p>
                         <p className='text-xs font-normal'>
-                            Tirage: #{currentBet?.draw?.numbers}
+                            Tirage: #{currentBet?.draw?.numbers || openDraw?.nexDrawNumber}
                         </p>
                     </div>
                     {(currentBet as any).number &&<div className='w-[50%]'>
@@ -44,13 +48,13 @@ const BetTicket = ({ currentBet}: Props) => {
 
                 <div className='flex flex-col text-center'>
                     <p className='text-sm font-semibold'>
-                        {currentBet.no1 ? ""+currentBet.no1 : null}
-                        {currentBet.no2 ? " - "+currentBet.no2 : null}
-                        {currentBet.no3 ? " - "+currentBet.no3 : null}
-                        {currentBet.no4 ? " - "+currentBet.no4 : null}
-                        {currentBet.no5 ? " - "+currentBet.no5 : null}
-                        {currentBet.no6 ? " - "+currentBet.no6 : null}
-                        {currentBet.no7 ? " - "+currentBet.no7 : null}
+                        {currentBet.no1 != null ? ""+currentBet.no1 : null}
+                        {currentBet.no2 != null ? " - "+currentBet.no2 : null}
+                        {currentBet.no3 != null ? " - "+currentBet.no3 : null}
+                        {currentBet.no4 != null ? " - "+currentBet.no4 : null}
+                        {currentBet.no5 != null ? " - "+currentBet.no5 : null}
+                        {currentBet.no6 != null ? " - "+currentBet.no6 : null}
+                        {currentBet.no7 != null ? " - "+currentBet.no7 : null}
                     </p>
                 </div>
                 <div className='flex flex-col text-center'>
@@ -58,13 +62,13 @@ const BetTicket = ({ currentBet}: Props) => {
                         {currentBet.isBlack ? "Black" : null}
                         {currentBet.isRed ? "Red" : null}
                         {currentBet.isGreen ? "Green" : null}
-                        {currentBet.isOdd ? "Odd" : null}
-                        {currentBet.isEven ? "Even" : null}
+                        {currentBet.isOdd ? "Odd (Impair)" : null}
+                        {currentBet.isEven ? "Even (Pair)" : null}
                         {currentBet.isFirst ? "Dozen: 1-12" : null}
                         {currentBet.isSecond ? "Dozen: 12-24" : null}
                         {currentBet.isThird ? "Dozen: 24-36" : null}
-                        {currentBet.isLow ? "Low" : null}
-                        {currentBet.isHigh ? "High" : null}
+                        {currentBet.isDown ? "Low" : null}
+                        {currentBet.isUp ? "High" : null}
                     </p>
                 </div>
 

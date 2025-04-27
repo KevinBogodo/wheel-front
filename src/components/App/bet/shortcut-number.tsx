@@ -17,7 +17,7 @@ const ShortcutNumber = ({ setBetNumber, setOdds}: Props) => {
         }
         // Générer n numéros uniques
         while (numbers.length < n) {
-          const randomNumber = Math.floor(Math.random() * 90) + 1;
+          const randomNumber = Math.floor(Math.random() * 35) + 1;
           if (!numbers.includes(randomNumber)) {
             numbers.push(randomNumber);
           }

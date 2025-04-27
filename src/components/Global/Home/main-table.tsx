@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import LowHignStats from './low-hign-stats'
 import OddEvenStats from './odd-even-stats'
 import ColorStats from './color-stats'

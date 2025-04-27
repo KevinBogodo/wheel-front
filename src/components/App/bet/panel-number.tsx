@@ -31,7 +31,7 @@ const RouletteBoard = ({ disableAdd, editBet, isDisabled }: Props) => {
   return (
     <div className='flex-[6] flex-col w-full h-full justify-center items-center'>
       <div className='grid grid-cols-6 gap-[1%] w-full h-[85%]'>
-        {rouletteNumbers.map((row, rowIndex) => (
+        {rouletteNumbers.map((row) => (
           row.map((num) => (
             <NumberBord
               key={num}

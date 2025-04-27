@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import MainTimer from "@/components/Global/Home/main-timer";
 import SpinWheel from "@/components/spin-wheel";
 import { api } from "@/config";
@@ -16,7 +16,7 @@ const WheelOfFortune = () => {
 
   const startingMinutes = 2;
   const startingSeconds = startingMinutes * 60;
-  const winningNumber = 2;
+  // const winningNumber = 2;
   const [time, setTime] = useState(startingSeconds);
   const [start, setStart] = useState(false);
   const [drawNumber, setDrawNumber] = useState(0);
@@ -72,8 +72,11 @@ const WheelOfFortune = () => {
   };
 
   return (
-    <div className="flex flex-row w-full h-full bg-[url('/red.jpg')] overflow-hidden">
-    {/* <div className="flex flex-row w-full h-full bg-[url('/blue.jpg')] overflow-hidden"> */}
+    <div 
+      className="flex flex-row w-full h-full overflow-hidden"
+      style={{ backgroundImage: `url('${import.meta.env.BASE_URL}red.jpg')` }}
+    >
+    {/* <div className="flex flex-row w-full h-full bg-[url('./blue.jpg')] overflow-hidden"> */}
 
       {/* left */}
       <div className="flex-[15%] flex-row">
@@ -81,7 +84,7 @@ const WheelOfFortune = () => {
           <MainTimer time={time} setTime={setTime}/>
         </div>
         <div className=" flex w-full h-2/4 m-auto">
-          {/* <img src={logo} className="m-auto px-[5%] w-auto h-auto" /> */}
+          <img src={logo} className="m-auto px-[5%] w-auto h-auto" />
         </div>
         <div className=" flex flex-col w-full h-1/4 m-auto">
           <MainDrawNumber drawNumber={drawNumber} setDrawNumber={setDrawNumber}/>

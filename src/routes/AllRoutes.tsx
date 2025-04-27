@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import HomeScreen from "@/pages/HomeScreen"
+// import HomeScreen from "@/pages/HomeScreen"
 import Authentification from "@/pages/authentification";
 import Dashboard from "@/pages/Dashboard";
 import UserSetting from "@/pages/setting/UserSetting";
