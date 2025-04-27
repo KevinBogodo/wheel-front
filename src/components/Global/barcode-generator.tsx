@@ -18,7 +18,7 @@ const BarcodeGenerator: React.FC<BarcodeGeneratorProps> = ({ value }) => {
         width={1.1}
         height={40}
         displayValue={true}
-        fontSize={9}
+        fontSize={13}
         background="#ffffff"
         lineColor="#000000"
       />

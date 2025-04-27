@@ -15,7 +15,7 @@ const LatestBet = ({lastBets, rePrintBet}: Props) => {
                 {lastBets && lastBets.map((bet:any, betIndex:number) => (
                     <TableRow key={betIndex} className="border-2">
                         <TableCell className=" w-2 py-1">{betIndex+1}</TableCell>
-                        <TableCell className="w-5 px-2 py-1">{bet.amount}</TableCell>
+                        <TableCell className="w-5 px-2 py-1">{bet.betAmount}</TableCell>
                         <TableCell className="py-1">
                             {
                                 (bet.no1 ? bet.no1: '') + 

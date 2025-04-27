@@ -104,7 +104,7 @@ const CashierHistory = () => {
     if (bets && bets.length > 0) {
       let total = 0;
       bets.map((bet:any) => {
-        total += bet.amount;
+        total += bet.betAmount;
       });
       setTotalAmount(total)
       setTotalTicket(bets.length);

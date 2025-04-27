@@ -24,7 +24,7 @@ const BetTicket = ({ currentBet, openDraw}: Props) => {
                         <p className='text-sm font-normal'>
                             Spin + Win
                         </p>
-                        <p className='text-xs font-normal'>
+                        <p className='text-md font-normal'>
                             Tirage: #{currentBet?.draw?.numbers || openDraw?.nexDrawNumber}
                         </p>
                     </div>
