@@ -1,3 +1,4 @@
+import ReportTicket from '@/components/App/reportTicket';
 import AppContent from '@/components/Global/app-content';
 import DataTable from '@/components/Global/DataTable';
 import DatePicker from '@/components/Global/date-picker';
@@ -14,16 +15,19 @@ import {
 import { AppDispatch, RootState } from "@/store";
 import { createSelector } from '@reduxjs/toolkit';
 import moment from 'moment';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useReactToPrint } from 'react-to-print';
 
 const AnalysesMonth = () => {
     const dispatch:AppDispatch = useDispatch();
+    const ticketRecap = useRef<HTMLDivElement | null>(null);
     const currentUserRole = JSON.parse(localStorage.getItem('role') || '');
     const [selectedUser, setSelectedUser] = useState<string>('');
-    const [startDate, setStartDate] = useState<string>('');
-    const [endDate, setEndtDate] = useState<string>('');
+    const [startDate, setStartDate] = useState<string>(moment().startOf('month').format('YYYY-MM-DD HH:mm:ss.SSS'));
+    const [endDate, setEndtDate] = useState<string>(moment().startOf('month').format('YYYY-MM-DD HH:mm:ss.SSS'));
     const [displayData, setDisplayData] = useState<{ month: string; saleAmount: number; paidAmount: number; difference: number }[]>([]);
+    const [currentData, setCurentData] = useState<any>(null);
 
   
     const selectAppState = (state:RootState) => state.Application;
@@ -49,6 +53,22 @@ const AnalysesMonth = () => {
   
       dispatch(getMonthliReport(param));
     },[]);
+
+    const printFn = useReactToPrint({
+      content: () => ticketRecap.current,
+      documentTitle: 'CAMER_GAME_PREVIEW',
+      copyStyles: true,
+      onBeforeGetContent: async () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(null);
+          }, 100);
+        });
+      },
+      onAfterPrint: () => {
+        setCurentData(null);
+      },
+    });
   
   
     useEffect(() => {
@@ -120,6 +140,20 @@ const AnalysesMonth = () => {
         style: '',
         cell: (cellProps:any) => {
           return <p> {formatNumberWithComma(cellProps.row.difference || 0)} FCFA</p>
+        }
+      },
+      {
+        header: 'Action',
+        accessor: 'action',
+        style: '',
+        cell: (cellProps:any) => {
+          return <button
+              className=' hover:text-blue-700 text-end'
+              onClick={() => {setCurentData(cellProps.row), printFn()}}
+            >
+              Imprimer
+            </button>
+          
         }
       }
   ],[]);
@@ -196,6 +230,13 @@ const AnalysesMonth = () => {
           </Card>
         }
       </AppContent>
+      <div ref={ticketRecap} className='w-[300px] hidden print:block'>
+        <ReportTicket
+          currentData={currentData}
+          selectedUser={allUsers.find((user:any) => user.id === selectedUser)}
+          period='month'
+        /> 
+      </div>
     </AppContent>
   )
 }

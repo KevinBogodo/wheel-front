@@ -7,7 +7,7 @@ import {
 } from '@/slice/thunks';
 import { AppDispatch, RootState } from '@/store';
 import { createSelector } from '@reduxjs/toolkit';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatNumberWithComma } from '@/helper/globalFunction';
 import { cashDeskOp, pagedObject } from '@/helper/global_interface';
@@ -20,9 +20,13 @@ import UserFilter from '@/components/Global/user-filter';
 import CardDataContent from '@/components/Global/card-data-content';
 import AppContent from '@/components/Global/app-content';
 import PageHeader from '@/components/Global/page-header';
+import { useReactToPrint } from 'react-to-print';
+import StatTicket from '@/components/App/statTicket';
+import { Button } from '@/components/ui/button';
 
 const CashierHistory = () => {
   const dispatch:AppDispatch = useDispatch();
+  const ticketRecap = useRef<HTMLDivElement | null>(null);
   const currentUserRole = JSON.parse(localStorage.getItem('role') || '');
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [totalTicket, setTotalTicket] = useState<number>(0);
@@ -71,6 +75,19 @@ const CashierHistory = () => {
       dispatch(getOpBets({id: openCashdeskOp.id}));
     }
   },[openCashdeskOp]);
+
+  const printFn = useReactToPrint({
+    content: () => ticketRecap.current,
+    documentTitle: 'CAMER_GAME_PREVIEW',
+    copyStyles: true,
+    onBeforeGetContent: async () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(null);
+        }, 100);
+      });
+    },
+});
 
   useEffect(() => {
 
@@ -167,6 +184,13 @@ const CashierHistory = () => {
             <CardTitle>Session de travail </CardTitle>
             <CardDescription>
               Date d'ouverture: {moment(openCashdeskOp.openDate).format('DD/MM/YYYY HH:mm')}
+              <Button
+                className='p-3 mx-3'
+                  variant='default'
+                  onClick={printFn}
+              >
+                  Imprimer statistique !
+              </Button>
             </CardDescription>
           </CardHeader>
 
@@ -237,7 +261,16 @@ const CashierHistory = () => {
           </AppContent>
         }
 
-      </AppContent>    
+      </AppContent>
+
+      <div ref={ticketRecap} className='w-[300px] hidden print:block'>
+        <StatTicket
+          cashdesk={openCashdeskOp.cashdesk} cashier={openCashdeskOp.user}
+          cashdeskOp={openCashdeskOp} bet={bets}
+          cashout={cashOuts}
+          action='preview'
+        /> 
+      </div>
     </AppContent>
   )
 }
