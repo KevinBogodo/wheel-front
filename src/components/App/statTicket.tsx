@@ -7,10 +7,9 @@ type Props = {
     cashdeskOp: any,
     bet: any,
     cashout: any,
-    action: 'preview' | 'close',
 }
 
-const StatTicket = ({ cashdesk, cashier, cashdeskOp, bet, cashout, action}: Props) => {
+const StatTicket = ({ cashdesk, cashier, cashdeskOp, bet, cashout}: Props) => {
 
     const ticketAmount = bet.reduce((total: any, item: { betAmount: any; }) => total + (item.betAmount || 0), 0);
     const cashoutAmount = cashout.reduce((total: any, item: { amount: any; }) => total + (item.amount || 0), 0);

@@ -146,7 +146,7 @@ const CashierHistory = () => {
       accessor: 'date',
       style: 'font-medium',
       cell: (cellProps:any) => {
-        return <p> {moment (cellProps.row.clodeDate).format('DD/MM/YYYY HH:mm')}</p>
+        return <p> {cellProps.row.closeDate ? moment (cellProps.row.closeDate).format('DD/MM/YYYY HH:mm') : ' - '}</p>
       }
     },
     {
@@ -268,7 +268,6 @@ const CashierHistory = () => {
           cashdesk={openCashdeskOp.cashdesk} cashier={openCashdeskOp.user}
           cashdeskOp={openCashdeskOp} bet={bets}
           cashout={cashOuts}
-          action='preview'
         /> 
       </div>
     </AppContent>
