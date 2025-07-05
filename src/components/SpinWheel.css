@@ -12,7 +12,7 @@
 }
 
 /* Style du pointeur */
-#pointer {
+/* #pointer {
     position: absolute;
     left: 50%;
     margin-top: -5%;
@@ -22,10 +22,9 @@
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 40px solid #d4cb7d;
-    /* background: radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%); */
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
     z-index: 10;
-}
+} */
 
 #winnerCircle {
     position: absolute;

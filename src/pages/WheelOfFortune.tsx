@@ -11,6 +11,7 @@ import MainTable from "@/components/Global/Home/main-table";
 
 
 import logo from '../assets/images/logo.png';
+import MainJackpot from "@/components/Global/Home/main-jackpot";
 
 const WheelOfFortune = () => {
 
@@ -23,6 +24,7 @@ const WheelOfFortune = () => {
   const [results, setResults] = useState<number>(0);
   const [lastFiveDraw, setLastFiveDraw] = useState([]);
   const [lastUndredDraw, setLastUndredDraw] = useState([]);
+  const [jackpot, setJackpot] = useState([]);
 
   useEffect(() => {
     socket.on("new_draw", (data: any) => {
@@ -63,8 +65,7 @@ const WheelOfFortune = () => {
           setDrawNumber(row.numbers);
           setLastFiveDraw(data?.data?.lastDraws);
           setLastUndredDraw(data?.data?.lastUndredDraw);
-          
-          // setJackpot(data?.data?.currentJackpot)
+          setJackpot(data?.data?.currentJackpot)
         }
       } catch (error) {
         console.error("Error fetching draw data:", error);
@@ -72,11 +73,11 @@ const WheelOfFortune = () => {
   };
 
   return (
-    <div 
-      className="flex flex-row w-full h-full overflow-hidden"
-      style={{ backgroundImage: `url('${import.meta.env.BASE_URL}red.jpg')` }}
-    >
-    {/* <div className="flex flex-row w-full h-full bg-[url('./blue.jpg')] overflow-hidden"> */}
+    // <div 
+    //   className="flex flex-row w-full h-full overflow-hidden"
+    //   style={{ backgroundImage: `url('${import.meta.env.BASE_URL}red.jpg')` }}
+    // >
+    <div className="flex flex-row w-full h-full bg-[url('./blue.jpg')] overflow-hidden">
 
       {/* left */}
       <div className="flex-[15%] flex-row">
@@ -88,6 +89,7 @@ const WheelOfFortune = () => {
         </div>
         <div className=" flex flex-col w-full h-1/4 m-auto">
           <MainDrawNumber drawNumber={drawNumber} setDrawNumber={setDrawNumber}/>
+          <MainJackpot jackpot={jackpot}/>
         </div>
       </div>
 
@@ -99,7 +101,7 @@ const WheelOfFortune = () => {
       </div>
 
       {/* Right */}
-      <div className="flex-[25%] flex-col w-full h-full text-xs">
+      <div className="flex-[25%] flex-col w-full h-full text-xs p-2">
         <MainTable lastUndredDraw={lastUndredDraw} lastDraw={lastFiveDraw}/>
       </div>
     </div>

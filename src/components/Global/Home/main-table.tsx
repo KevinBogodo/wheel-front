@@ -107,7 +107,7 @@ const MainTable = ({lastUndredDraw, lastDraw}: Props) => {
   
   return (
     <div className="flex flex-col items-center w-full h-full">
-      <div className="flex flex-row w-full h-full gap-5 pt-[5%] px-1 font-bold">
+      <div className="flex flex-row w-full h-full gap-5 mt-[5%] px-1 font-bold p-[1%] items-center backdrop-blur-md bg-white/10 border border-white/20 rounded-xl shadow-lg">
         <div className="flex-[2] w-full h-full">
           <table className=" w-full h-full px-2">
             <thead>
@@ -187,7 +187,7 @@ const MainTable = ({lastUndredDraw, lastDraw}: Props) => {
       </div>
       <div className="flex flex-col w-full h-full p-[1%] items-center">
         <p className="font-bold py-1 text-lg" style={{ color: '#fff' }}>STATISTICS</p>
-        <div className="border border-gray-400 w-full h-full p-3">
+        <div className="border-gray-400 w-full h-full p-[1%] items-center backdrop-blur-md bg-white/10 border border-white/20 rounded-xl shadow-lg">
         
             {/*  Number stat */}
             <MainNumberStats numbers={numbers} />

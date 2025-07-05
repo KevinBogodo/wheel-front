@@ -123,92 +123,6 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     return Math.PI/2 - (winningIndex * angleStep + angleStep / 2);
   };
 
-  // Draw wheel shadow - REDUCED
-  // const drawWheelShadow = (ctx: CanvasRenderingContext2D, radius: number, borderWidth: number) => {
-  //   ctx.save();
-    
-  //   // Create a more subtle shadow around the wheel
-  //   // Similar to but softer than: box-shadow: 0px 0px 40px 10px rgba(9, 9, 9, 0.921);
-  //   const shadowSize = 25; // Reduced from 40 to 25
-  //   const totalRadius = radius + borderWidth + shadowSize;
-    
-  //   // Create a radial gradient for the shadow
-  //   const shadowGradient = ctx.createRadialGradient(
-  //     0, 0, radius + borderWidth - 5, // Inner radius just inside the border
-  //     0, 0, totalRadius // Outer radius includes shadow
-  //   );
-    
-  //   shadowGradient.addColorStop(0, 'rgba(9, 9, 9, 0.5)'); // Reduced opacity from 0.921 to 0.5
-  //   shadowGradient.addColorStop(0.4, 'rgba(9, 9, 9, 0.3)'); // Reduced opacity
-  //   shadowGradient.addColorStop(0.8, 'rgba(9, 9, 9, 0.1)'); // Reduced opacity
-  //   shadowGradient.addColorStop(1, 'rgba(9, 9, 9, 0)'); // Fade to transparent
-    
-  //   // Draw the shadow as a ring around the wheel
-  //   ctx.beginPath();
-  //   ctx.arc(0, 0, totalRadius, 0, 2 * Math.PI);
-  //   ctx.arc(0, 0, radius + borderWidth - 5, 0, 2 * Math.PI, true); // Cut out the inside
-  //   ctx.fillStyle = shadowGradient;
-  //   ctx.fill();
-    
-  //   ctx.restore();
-  // };
-
-  // Draw gold border
-  // const drawGoldBorder = (ctx: CanvasRenderingContext2D, radius: number) => {
-  //   const borderWidth = radius * 0.05; // Width of the gold border proportional to radius
-    
-  //   ctx.save();
-    
-  //   // Draw the wheel shadow first (behind everything)
-  //   drawWheelShadow(ctx, radius, borderWidth);
-    
-  //   // Gold border with gradient similar to winnerCircle
-  //   const goldGradient = ctx.createRadialGradient(
-  //     0, 0, radius,
-  //     0, 0, radius + borderWidth
-  //   );
-  //   goldGradient.addColorStop(0, '#f9e547');
-  //   goldGradient.addColorStop(0.4, '#e7d323');
-  //   goldGradient.addColorStop(1, '#b6a71d');
-    
-  //   ctx.beginPath();
-  //   ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-  //   ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
-  //   ctx.fillStyle = goldGradient;
-  //   ctx.fill();
-    
-  //   // Add thin border
-  //   ctx.beginPath();
-  //   ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-  //   ctx.lineWidth = radius * 0.01; // Proportional line width
-  //   ctx.strokeStyle = '#d4b923';
-  //   ctx.stroke();
-    
-  //   // Inner border
-  //   ctx.beginPath();
-  //   ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-  //   ctx.lineWidth = radius * 0.01; // Proportional line width
-  //   ctx.strokeStyle = '#d4b923';
-  //   ctx.stroke();
-    
-  //   // Add inner highlights
-  //   const innerHighlight = ctx.createRadialGradient(
-  //     0, 0, radius,
-  //     0, 0, radius + borderWidth
-  //   );
-  //   innerHighlight.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
-  //   innerHighlight.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
-  //   innerHighlight.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
-    
-  //   ctx.beginPath();
-  //   ctx.arc(0, 0, radius + borderWidth, 0, 2 * Math.PI);
-  //   ctx.arc(0, 0, radius, 0, 2 * Math.PI, true);
-  //   ctx.fillStyle = innerHighlight;
-  //   ctx.fill();
-    
-  //   ctx.restore();
-  // };
-
   // Draw the wheel
   const drawWheel = (ctx: CanvasRenderingContext2D, rotationAngle: number = 0) => {
     const canvas = canvasRef.current;
@@ -223,20 +137,45 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     ctx.save();
     ctx.translate(canvas.width/2, canvas.height/2);
 
-    // Draw gold border first (behind the wheel)
-    // drawGoldBorder(ctx, radius);
-
     // Draw the segments
     for (let i = 0; i < numSegments; i++) {
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, radius, angleStep * i + rotationAngle, angleStep * (i + 1) + rotationAngle);
-      ctx.lineTo(0, 0);
-      ctx.fillStyle = segments[i].color;
-      ctx.lineWidth = canvas.width * 0.001; // Proportional line width
-      ctx.fill();
-      ctx.stroke();
-    }
+  const startAngle = angleStep * i + rotationAngle;
+  const endAngle = angleStep * (i + 1) + rotationAngle;
+  const segment = segments[i];
+  
+  // Segment principal
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.arc(0, 0, radius, startAngle, endAngle);
+  ctx.lineTo(0, 0);
+  ctx.fillStyle = segment.color;
+  ctx.fill();
+  
+  // Gradient interne pour créer de la profondeur avec ombre subtile
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.arc(0, 0, radius, startAngle, endAngle);
+  ctx.lineTo(0, 0);
+  
+  const depthGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
+  depthGradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)'); // Centre légèrement plus clair
+  depthGradient.addColorStop(0.7, 'rgba(0, 0, 0, 0)'); // Milieu transparent
+  depthGradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)'); // Bord avec ombre légère
+  
+  ctx.fillStyle = depthGradient;
+  ctx.fill();
+  
+  // Bordure dorée métallique
+  ctx.lineWidth = canvas.width * 0.002;
+  ctx.strokeStyle = '#ffd700';
+  ctx.shadowColor = 'rgba(255, 215, 0, 0.3)';
+  ctx.shadowBlur = 3;
+  ctx.stroke();
+  
+  // Réinitialiser les effets d'ombre
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+}
 
     // Add the numbers with responsive font size
     const fontSize = Math.max(canvas.width * 0.035, 12); // Min font size of 12px
@@ -262,8 +201,6 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, 2 * Math.PI);
     ctx.lineWidth = canvas.width * 0.003; // Proportional line width
-    // ctx.strokeStyle = "#DDD";
-    // ctx.stroke();
 
     ctx.restore();
   };
@@ -279,8 +216,6 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-
     
     // Initial rotation to position winning number at the pointer
     const initialRotation = getInitialRotation(winningNumber);
@@ -355,33 +290,66 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
     }
   }, [start]);
   
-  return (
+ return (
     <div 
       ref={containerRef}
-      className={`relative w-full aspect-square max-w-[800px] mx-auto ${className || ''}`}
+      className={`relative w-full aspect-square max-w-[1000px] mx-auto ${className || ''}`}
     >
-      {/* Image de la roue en arrière-plan */}
-      <div 
-        className="absolute inset-0 bg-no-repeat bg-center bg-contain"
-        style={{ 
-          backgroundImage: 'url(./wheel01.png)',
-          // backgroundImage: `url('${import.meta.env.BASE_URL}wheel01.jpg')`,
-          width: '120%', 
-          height: '120%', 
-          left: '-10%', 
-          top: '-10%',
-          zIndex: 0
-        }}
-      ></div>
-      {/* Canvas centré */}
-      <canvas 
-        ref={canvasRef} 
-        id="wheel" 
-        className="relative w-full h-full"
-        style={{ zIndex: 1 }}
-      />
-      
+      {/* Bordure gold métallique casino */}
+      <div className="relative w-full h-full">
+        {/* Bordure extérieure avec effet gold métallique */}
+        <div 
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: `conic-gradient(
+              from 0deg,
+              #FFD700 0deg,
+              #FFA500 30deg,
+              #FFD700 60deg,
+              #B8860B 90deg,
+              #FFD700 120deg,
+              #FFA500 150deg,
+              #FFD700 180deg,
+              #B8860B 210deg,
+              #FFD700 240deg,
+              #FFA500 270deg,
+              #FFD700 300deg,
+              #B8860B 330deg,
+              #FFD700 360deg
+            )`,
+            boxShadow: `
+              0 0 20px rgba(255, 215, 0, 0.6),
+              0 0 40px rgba(255, 215, 0, 0.4),
+              0 0 60px rgba(255, 215, 0, 0.2),
+              inset 0 0 20px rgba(255, 215, 0, 0.3)
+            `,
+            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))',
+            padding: '1%'
+          }}
+        >
+            {/* Canvas container avec bordure finale */}
+            <div 
+              className="w-full h-full rounded-full"
+            >
+              <canvas 
+                ref={canvasRef} 
+                id="wheel" 
+                className="relative w-full h-full"
+                style={{ 
+                  zIndex: 1,
+                  borderRadius: '50%',
+                  boxShadow: `
+                    inset 0 0 20px rgba(0, 0, 0, 0.8),
+                    0 0 10px rgba(255, 215, 0, 0.3)
+                  `
+                }}
+              />
+            </div>
+          </div>
+      </div>
+
       {/* Pointeur avec taille responsive */}
+      {/* Pointeur premium avec taille responsive */}
       <div 
         id="pointer" 
         style={{
@@ -389,54 +357,221 @@ const SpinWheel: React.FC<SpinWheelProps> = ({ winningNumber, className, start, 
           fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.04)`
         }}
       ></div>
+
+      <style jsx>{`
+        /* Style du pointeur premium */
+        #pointer {
+          position: absolute;
+          left: 50%;
+          margin-top: -6%;
+          transform: translateX(-50%); 
+          width: 0;
+          height: 0;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+          border-bottom: 40px solid #ffd700;
+          box-shadow
+          z-index: 10;
+          
+          /* Effet 3D subtil */
+          filter: 
+            drop-shadow(0 10px 10px rgba(0, 0, 0, 0.5))
+            drop-shadow(0 0 11px rgba(255, 215, 0, 0.3));
+        }
+        
+        /* Contour doré pour définir la forme */
+        #pointer::after {
+          content: '';
+          position: absolute;
+          left: -22px;
+          top: -2px;
+          width: 0;
+          height: 0;
+          border-left: 22px solid transparent;
+          border-right: 22px solid transparent;
+          border-bottom: 44px solid rgba(255, 215, 0, 0.2);
+          z-index: -1;
+        }
+      `}</style>
      
-      
-      {/* Conteneur pour wheel02.png qui entoure le winnerCircle */}
+      {/* Conteneur luxueux pour wheel02.png qui entoure le winnerCircle */}
       <div 
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         style={{ 
           zIndex: 998,
           width: '25%',
           height: '25%',
-          // backgroundImage: 'url(./wheel02.png)',
           backgroundImage: `url('${import.meta.env.BASE_URL}wheel02.jpg')`,
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          filter: 'drop-shadow(0 0 30px rgba(255, 215, 0, 0.4))',
+          animation: 'pulse 2s infinite alternate'
         }}
       >
-        {/* Cercle du gagnant avec taille responsive */}
+        {/* Cercle du gagnant avec design casino premium */}
         <div 
-          // id="winnerCircle" 
           style={{ 
             zIndex: 999,
             width: '94%',
             height: '95%',
             fontSize: `calc(${Math.min(canvasSize.width, canvasSize.height)}px * 0.12)`,
-            // backgroundColor: winnerColor || 'radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%)',
-            background: winnerColor || 'radial-gradient(circle, #f9e547 0%, #e7d323 40%, #b6a71d 100%)',
-
+            background: winnerColor || `
+              radial-gradient(circle at 30% 30%, #fff 0%, #ffd700 20%, #ffb300 40%, #ff8c00 60%, #cc6600 80%, #994400 100%),
+              linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%)
+            `,
             borderRadius: '50%',
-            // border: '4px solid #d4b923',
             boxShadow: `
-              0px 0px 20px 10px rgba(28, 28, 28, 0.8),
-              inset 0px 0px 10px 5px rgba(255, 255, 255, 0.3)
+              0 0 0 3px #ffd700,
+              0 0 0 6px rgba(255, 215, 0, 0.3),
+              0 0 40px 15px rgba(255, 215, 0, 0.6),
+              inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+              inset 0 0 20px 5px rgba(255, 255, 255, 0.2),
+              inset 0 -10px 20px 0px rgba(0, 0, 0, 0.3)
             `,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            color: '#fff', // texte blanc sur fond noir
-            textShadow: '0px 1px 2px rgba(255, 255, 255, 0.5)',
-            transition: 'all 0.2s ease-in-out',
+            color: '#fff',
+            textShadow: `
+              0 0 10px rgba(255, 215, 0, 0.8),
+              0 0 20px rgba(255, 215, 0, 0.6),
+              0 0 30px rgba(255, 215, 0, 0.4),
+              2px 2px 4px rgba(0, 0, 0, 0.8)
+            `,
+            fontWeight: 'bold',
+            fontFamily: 'serif',
+            letterSpacing: '0.05em',
+            position: 'relative',
+            transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            animation: winner !== null ? 'winnerReveal 0.8s ease-out forwards, winnerGlow 1.5s ease-in-out infinite alternate 0.8s' : 'none',
+            transform: winner !== null ? 'scale(1.1)' : 'scale(1)',
+            opacity: 1
           }}
-          className='animate-pop_in'
+          className={winner !== null ? 'animate-winner-entrance' : ''}
         >
-          {winner !== null ? winner : ''}
+          {/* Effet de particules dorées qui apparaissent avec le gagnant */}
+          {winner !== null && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                background: `
+                  radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.8) 0%, transparent 10%),
+                  radial-gradient(circle at 80% 30%, rgba(255, 215, 0, 0.6) 0%, transparent 8%),
+                  radial-gradient(circle at 60% 80%, rgba(255, 215, 0, 0.7) 0%, transparent 12%),
+                  radial-gradient(circle at 30% 70%, rgba(255, 215, 0, 0.5) 0%, transparent 6%)
+                `,
+                animation: 'sparkle 2s ease-in-out infinite alternate',
+                pointerEvents: 'none',
+                zIndex: 0
+              }}
+            />
+          )}
+          
+          {/* Contenu du gagnant avec animation spectaculaire */}
+          <span style={{ 
+            position: 'relative', 
+            zIndex: 1,
+            transform: winner !== null ? 'scale(1) rotateY(0deg)' : 'scale(0.5) rotateY(180deg)',
+            opacity: winner !== null ? 1 : 0,
+            transition: 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+            display: 'inline-block'
+          }}>
+            {winner !== null ? winner : ''}
+          </span>
         </div>
       </div>
+
+      <style>{`
+        @keyframes winnerReveal {
+          0% {
+            transform: scale(0.3) rotate(-180deg);
+            opacity: 0;
+            box-shadow: 
+              0 0 0 0px #ffd700,
+              0 0 0 0px rgba(255, 215, 0, 0.3),
+              0 0 0px 0px rgba(255, 215, 0, 0.6);
+          }
+          50% {
+            transform: scale(1.3) rotate(0deg);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(1.1) rotate(0deg);
+            opacity: 1;
+            box-shadow: 
+              0 0 0 3px #ffd700,
+              0 0 0 6px rgba(255, 215, 0, 0.3),
+              0 0 40px 15px rgba(255, 215, 0, 0.6),
+              inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+              inset 0 0 20px 5px rgba(255, 255, 255, 0.2),
+              inset 0 -10px 20px 0px rgba(0, 0, 0, 0.3);
+          }
+        }
+        
+        @keyframes winnerGlow {
+          0% {
+            box-shadow: 
+              0 0 0 3px #ffd700,
+              0 0 0 6px rgba(255, 215, 0, 0.3),
+              0 0 40px 15px rgba(255, 215, 0, 0.6),
+              inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+              inset 0 0 20px 5px rgba(255, 255, 255, 0.2),
+              inset 0 -10px 20px 0px rgba(0, 0, 0, 0.3);
+          }
+          100% {
+            box-shadow: 
+              0 0 0 3px #ffd700,
+              0 0 0 6px rgba(255, 215, 0, 0.6),
+              0 0 60px 25px rgba(255, 215, 0, 0.8),
+              inset 0 0 0 2px rgba(255, 255, 255, 0.6),
+              inset 0 0 30px 10px rgba(255, 255, 255, 0.3),
+              inset 0 -10px 20px 0px rgba(0, 0, 0, 0.3);
+          }
+        }
+        
+        @keyframes sparkle {
+          0% {
+            opacity: 0.3;
+            transform: scale(0.8);
+          }
+          100% {
+            opacity: 0.8;
+            transform: scale(1.2);
+          }
+        }
+        
+        @keyframes shimmer {
+          0% {
+            opacity: 0;
+            transform: translateX(-100%) rotate(45deg);
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+            transform: translateX(200%) rotate(45deg);
+          }
+        }
+        
+        @keyframes pulse {
+          0% {
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
+          }
+          100% {
+            filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.7));
+          }
+        }
+      `}</style>
     </div>
   );
 };
